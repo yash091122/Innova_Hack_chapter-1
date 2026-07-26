@@ -72,9 +72,12 @@ export async function POST(request: NextRequest) {
   try {
     sessionId = await createSession(topic.trim());
   } catch (err) {
-    // If Supabase isn't configured, generate a local session ID and continue
-    console.warn("[API] Supabase unavailable, using local session ID:", err);
-    sessionId = `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const errorMsg = err instanceof Error ? err.message : "Unknown error";
+    console.error("[API] Failed to create session:", err);
+    return NextResponse.json(
+      { error: `Database error: ${errorMsg}. Did you run the Supabase SQL setup script?` },
+      { status: 500 }
+    );
   }
 
   // We no longer run the pipeline in the background here.
