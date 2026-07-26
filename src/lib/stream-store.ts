@@ -1,5 +1,5 @@
 /**
- * VerifAI — SSE Stream Store
+ * FactForge — SSE Stream Store
  * In-memory per-session event emitter for Server-Sent Events fanout.
  *
  * NOTE: This works for single-instance deployments (local dev, single-server prod).

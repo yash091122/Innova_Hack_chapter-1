@@ -93,7 +93,7 @@ export default function HistoryPage() {
               </div>
             </div>
             <span className="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
-              VerifAI
+              FactForge
             </span>
           </button>
 

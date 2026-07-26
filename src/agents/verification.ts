@@ -1,5 +1,5 @@
 /**
- * VerifAI — Agent 2: Verification Agent
+ * FactForge — Agent 2: Verification Agent
  *
  * Responsibilities:
  * 1. Run 2–3 fresh, independent Tavily searches per claim

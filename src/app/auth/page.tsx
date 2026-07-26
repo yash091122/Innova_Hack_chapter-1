@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * /auth — Sign In & Sign Up Page for VerifAI / InnovaHacks AI
+ * /auth — Sign In & Sign Up Page for FactForge
  * Matches reference glassmorphism design & Codystar typography
  * STRICT: Official Lucide React SVG icons only. No unicode text symbols.
  */
@@ -89,7 +89,7 @@ export default function AuthPage() {
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
           </div>
           <span className="text-xl font-black tracking-tight text-slate-900">
-            InnovaHacks <span className="text-slate-500 font-medium">AI</span>
+            Fact<span className="text-slate-500 font-medium">Forge</span>
           </span>
         </div>
       </header>
@@ -238,7 +238,7 @@ export default function AuthPage() {
 
       {/* FOOTER */}
       <footer className="w-full max-w-7xl mx-auto px-6 py-6 text-center text-xs font-semibold text-slate-500">
-        InnovaHacks AI Fact-Verification Platform
+        FactForge Fact-Verification Platform
       </footer>
 
     </main>

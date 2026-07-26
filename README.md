@@ -1,8 +1,8 @@
-# VerifAI
+# FactForge
 
 **Autonomous Multi-Agent Research & Fact-Verification System**
 
-VerifAI takes a user-submitted topic or claim, runs it through a 4-agent AI pipeline with a self-correcting feedback loop, and returns a citation-backed report with per-claim confidence scores — with live streaming progress in the UI.
+FactForge takes a user-submitted topic, runs it through a 4-agent AI pipeline with a self-correcting feedback loop, and returns a citation-backed report with per-claim confidence scores — with live streaming progress in the UI.
 
 ---
 
@@ -29,7 +29,7 @@ VerifAI takes a user-submitted topic or claim, runs it through a 4-agent AI pipe
 ### 1. Install dependencies
 
 ```bash
-cd verifai
+cd factforge
 npm install
 ```
 

@@ -29,7 +29,7 @@ export default function ExportButton({
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `verifai-report-${topic.toLowerCase().replace(/\s+/g, "-").slice(0, 40)}.md`;
+      a.download = `factforge-report-${topic.toLowerCase().replace(/\s+/g, "-").slice(0, 40)}.md`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -55,7 +55,7 @@ export default function ExportButton({
       doc.setFont("helvetica", "bold");
       doc.setFontSize(18);
       doc.setTextColor(30, 30, 30);
-      doc.text("VerifAI Research Report", margin, margin + 5);
+      doc.text("FactForge Research Report", margin, margin + 5);
 
       doc.setFont("helvetica", "normal");
       doc.setFontSize(11);
@@ -131,14 +131,14 @@ export default function ExportButton({
         doc.setFontSize(8);
         doc.setTextColor(150, 150, 150);
         doc.text(
-          `VerifAI — Page ${i} of ${pageCount}`,
+          `FactForge — Page ${i} of ${pageCount}`,
           pageWidth / 2,
           pageHeight - 10,
           { align: "center" }
         );
       }
 
-      const filename = `verifai-report-${topic.toLowerCase().replace(/\s+/g, "-").slice(0, 40)}.pdf`;
+      const filename = `factforge-report-${topic.toLowerCase().replace(/\s+/g, "-").slice(0, 40)}.pdf`;
       doc.save(filename);
     } catch (err) {
       console.error("PDF export failed:", err);

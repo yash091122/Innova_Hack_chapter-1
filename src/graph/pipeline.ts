@@ -1,5 +1,5 @@
 /**
- * VerifAI — LangGraph Pipeline
+ * FactForge — LangGraph Pipeline
  *
  * Implements the 4-agent pipeline as a real LangGraph StateGraph with:
  * - Explicit nodes for each agent
@@ -223,7 +223,7 @@ function graphStateToPipelineState(state: GraphState): PipelineState {
 // ─── Main entry point ──────────────────────────────────────────────────────────
 
 /**
- * Run the complete VerifAI LangGraph pipeline.
+ * Run the complete FactForge LangGraph pipeline.
  * Emits SSE events throughout and saves final state to Supabase.
  */
 export async function runPipeline(
@@ -253,7 +253,7 @@ export async function runPipeline(
     createEvent(sessionId, {
       type: "stage_change",
       stage: "research",
-      message: `🚀 VerifAI pipeline started for topic: "${topic}"`,
+      message: `🚀 FactForge pipeline started for topic: "${topic}"`,
     })
   );
 

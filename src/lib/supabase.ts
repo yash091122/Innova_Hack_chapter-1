@@ -1,5 +1,5 @@
 /**
- * VerifAI — Supabase Client & Session Helpers
+ * FactForge — Supabase Client & Session Helpers
  */
 
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
@@ -45,7 +45,7 @@ export function getSupabasePublicClient(): SupabaseClient | null {
 
 // ─── SQL Schema (for README / setup) ─────────────────────────────────────────
 export const SUPABASE_SCHEMA_SQL = `
--- Run this in the Supabase SQL editor to set up VerifAI tables
+-- Run this in the Supabase SQL editor to set up FactForge tables
 
 CREATE TABLE IF NOT EXISTS sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

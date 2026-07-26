@@ -1,5 +1,5 @@
 /**
- * VerifAI — Agent 1: Research Agent
+ * FactForge — Agent 1: Research Agent
  *
  * Responsibilities:
  * 1. Break topic into 3–6 sub-questions using LLM

@@ -1,5 +1,5 @@
 /**
- * VerifAI — Agent 3: Contradiction & Hallucination Detector
+ * FactForge — Agent 3: Contradiction & Hallucination Detector
  *
  * Responsibilities:
  * 1. Pairwise consistency check across all claims

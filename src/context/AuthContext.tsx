@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * VerifAI — Supabase Authentication Context & Hook
+ * FactForge — Supabase Authentication Context & Hook
  */
 
 import React, { createContext, useContext, useEffect, useState } from "react";

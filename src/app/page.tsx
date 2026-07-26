@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Landing Page — VerifAI Landing Page
+ * Landing Page — FactForge Landing Page
  * Exact recreation of the attached reference design:
  * - Top header with nav links & pill buttons + Supabase Auth status
  * - Hero section with big Codystar "VERIFY AI CLAIMS" title & "START FREE DEMO" button
@@ -162,7 +162,7 @@ function HomeContent() {
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
           </div>
           <span className="text-xl font-black tracking-tight text-slate-900">
-            InnovaHacks <span className="text-slate-500 font-medium">AI</span>
+            Fact<span className="text-slate-500 font-medium">Forge</span>
           </span>
         </div>
 
@@ -540,7 +540,7 @@ function HomeContent() {
       {/* FOOTER */}
       <footer className="w-full max-w-7xl mx-auto px-6 py-8 border-t border-slate-200/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-slate-500 z-20">
         <div>
-          <span>InnovaHacks AI Fact-Verification Platform</span>
+          <span>FactForge Fact-Verification Platform</span>
           <span className="block sm:inline sm:ml-2 text-slate-400 font-normal">Copyright © . All rights reserved.</span>
         </div>
 

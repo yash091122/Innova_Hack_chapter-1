@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     return new Response(reportMarkdown, {
       headers: {
         "Content-Type": "text/markdown; charset=utf-8",
-        "Content-Disposition": `attachment; filename="verifai-report-${safeFilename}.md"`,
+        "Content-Disposition": `attachment; filename="factforge-report-${safeFilename}.md"`,
       },
     });
   }
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
     {
       headers: {
         "Content-Type": "application/json",
-        "Content-Disposition": `inline; filename="verifai-report-${safeFilename}.json"`,
+        "Content-Disposition": `inline; filename="factforge-report-${safeFilename}.json"`,
       },
     }
   );

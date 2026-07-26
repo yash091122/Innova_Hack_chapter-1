@@ -1,5 +1,5 @@
 /**
- * VerifAI — Core Type Definitions
+ * FactForge — Core Type Definitions
  * Shared state interfaces for the 4-agent LangGraph pipeline
  */
 

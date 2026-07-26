@@ -10,12 +10,12 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "InnovaHacks AI — Autonomous Multi-Agent Fact Verification",
+  title: "FactForge — Autonomous Multi-Agent Fact Verification",
   description:
-    "Submit any topic or claim. VerifAI's 4-agent AI pipeline researches, cross-checks, and detects contradictions — returning a citation-backed report with confidence scores.",
+    "Submit any topic or claim. FactForge's 4-agent AI pipeline researches, cross-checks, and detects contradictions — returning a citation-backed report with confidence scores.",
   keywords: ["fact check", "AI research", "verification", "LangGraph", "Claude"],
   openGraph: {
-    title: "InnovaHacks AI — Autonomous Fact Verification",
+    title: "FactForge — Autonomous Fact Verification",
     description: "4-agent AI pipeline for rigorous, citation-backed fact checking",
     type: "website",
   },

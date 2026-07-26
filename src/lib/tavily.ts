@@ -1,5 +1,5 @@
 /**
- * VerifAI — Tavily Search API Wrapper
+ * FactForge — Tavily Search API Wrapper
  * Provides web search with retry logic and error handling
  */
 

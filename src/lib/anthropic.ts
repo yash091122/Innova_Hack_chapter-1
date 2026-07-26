@@ -1,5 +1,5 @@
 /**
- * VerifAI — Google Gemini SDK Wrapper
+ * FactForge — Google Gemini SDK Wrapper
  * Drop-in replacement for anthropic.ts — same exported API, Gemini under the hood.
  * All 4 agents import from this file via the same function names.
  */

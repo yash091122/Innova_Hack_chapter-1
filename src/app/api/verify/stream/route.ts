@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
       sendEvent(
         createEvent(sessionId, {
           type: "agent_log",
-          message: "🔌 Connected to VerifAI pipeline stream",
+          message: "🔌 Connected to FactForge pipeline stream",
           stage: "idle",
         })
       );
