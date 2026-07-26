@@ -16,7 +16,7 @@ import type { PipelineStage, ClaimState, SSEEvent } from "@/types";
 const AgentPipeline = dynamic(() => import("@/components/AgentPipeline"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-64 rounded-2xl border border-white/10 bg-gray-950/50 animate-pulse" />
+    <div className="w-full h-64 rounded-3xl border border-gray-200/60 bg-white/40 animate-pulse soft-card" />
   ),
 });
 
@@ -58,7 +58,6 @@ export default function VerifyPage() {
 
   const handleStageChange = useCallback((stage: PipelineStage) => {
     setCurrentStage(stage);
-    // Reset loop when leaving contradiction check
     if (stage !== "contradiction_check" && stage !== "research") {
       setLoopTriggered(false);
     }
@@ -90,7 +89,6 @@ export default function VerifyPage() {
           finalReportMarkdown: ps.finalReportMarkdown ?? "",
         });
       } else {
-        // Fetch from API if not in event payload
         fetchReport();
       }
     } else {
@@ -127,35 +125,33 @@ export default function VerifyPage() {
         }[currentStage] ?? 0;
 
   return (
-    <main className="min-h-screen animated-gradient">
+    <main className="min-h-screen relative z-0">
       {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-5 max-w-6xl mx-auto border-b border-white/5">
+      <nav className="flex items-center justify-between px-6 py-5 max-w-6xl mx-auto z-10 border-b border-gray-200/50">
         <button
           onClick={() => router.push("/")}
           className="flex items-center gap-2 group"
         >
-          <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center text-sm font-bold shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+          <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-sm font-bold shadow-sm text-gray-900 group-hover:bg-gray-50 transition-colors">
             V
           </div>
-          <span className="text-lg font-bold text-white group-hover:text-white/80 transition-colors">
+          <span className="text-lg font-bold text-gray-900 group-hover:text-gray-600 transition-colors">
             VerifAI
           </span>
         </button>
 
         <div className="flex items-center gap-3">
-          {/* Stage indicator */}
-          <span className="text-sm text-white/50">
+          <span className="text-sm font-medium text-gray-500">
             {STAGE_LABELS[currentStage] ?? currentStage}
           </span>
           {currentStage !== "done" && currentStage !== "idle" && (
-            <div className="w-4 h-4 border-2 border-white/20 border-t-white/80 rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-900 rounded-full animate-spin" />
           )}
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="max-w-6xl mx-auto px-6 py-8 z-10 relative">
         <AnimatePresence mode="wait">
-          {/* Live progress view */}
           {!isDone && (
             <motion.div
               key="progress"
@@ -164,19 +160,18 @@ export default function VerifyPage() {
               exit={{ opacity: 0, y: -20 }}
               className="space-y-6"
             >
-              {/* Overall progress bar */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <h1 className="text-xl font-bold text-white">
+              <div className="glass-card p-6 rounded-3xl mb-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h1 className="text-xl font-bold text-gray-900">
                     Running verification pipeline
                   </h1>
-                  <span className="text-sm text-white/40">
+                  <span className="text-sm font-bold text-gray-500">
                     {progressPercent}%
                   </span>
                 </div>
-                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div className="h-2 bg-gray-200/50 rounded-full overflow-hidden shadow-inner">
                   <motion.div
-                    className="h-full bg-white/80 shadow-[0_0_10px_rgba(255,255,255,0.5)] rounded-full"
+                    className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full"
                     initial={{ width: "0%" }}
                     animate={{ width: `${progressPercent}%` }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
@@ -184,7 +179,6 @@ export default function VerifyPage() {
                 </div>
               </div>
 
-              {/* Loop alert banner */}
               <AnimatePresence>
                 {loopTriggered && (
                   <motion.div
@@ -193,11 +187,11 @@ export default function VerifyPage() {
                     exit={{ opacity: 0, height: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-orange-500/15 border border-orange-500/30 text-orange-300 text-sm">
+                    <div className="flex items-center gap-3 px-5 py-4 rounded-2xl bg-orange-50 border border-orange-200 text-sm shadow-sm mb-6">
                       <span className="text-xl">🔄</span>
                       <div>
-                        <span className="font-semibold">Feedback loop triggered!</span>
-                        <span className="text-orange-300/70 ml-2">
+                        <span className="font-semibold text-orange-800">Feedback loop triggered!</span>
+                        <span className="text-orange-600/80 ml-2">
                           Issue detected — routing claim back to Agent 1 for re-research
                         </span>
                       </div>
@@ -206,11 +200,9 @@ export default function VerifyPage() {
                 )}
               </AnimatePresence>
 
-              {/* Main grid: pipeline viz + live log */}
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                {/* Left: Pipeline visualization (wider) */}
                 <div className="lg:col-span-3 space-y-4">
-                  <h2 className="text-sm font-medium text-white/50 uppercase tracking-wider">
+                  <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider pl-1">
                     Agent Pipeline
                   </h2>
                   <AgentPipeline
@@ -221,8 +213,7 @@ export default function VerifyPage() {
                     }
                   />
 
-                  {/* Stage info cards */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
                     {[
                       { stage: "research", label: "Research", icon: "🔍" },
                       { stage: "verification", label: "Verify", icon: "🔎" },
@@ -243,22 +234,22 @@ export default function VerifyPage() {
                       return (
                         <div
                           key={stage}
-                          className={`rounded-xl p-3 border text-center transition-all ${
+                          className={`rounded-2xl p-4 text-center transition-all duration-300 ${
                             isActive
-                              ? "border-white/40 bg-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                              ? "bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-200/60 scale-105 z-10"
                               : isDoneStage
-                              ? "border-green-500/30 bg-green-950/20"
-                              : "border-white/5 bg-white/3"
+                              ? "bg-emerald-50/50 border border-emerald-100/50 opacity-80"
+                              : "glass-card opacity-60"
                           }`}
                         >
-                          <div className="text-lg">{icon}</div>
+                          <div className="text-2xl mb-1">{icon}</div>
                           <div
-                            className={`text-xs font-medium mt-1 ${
+                            className={`text-xs font-bold ${
                               isActive
-                                ? "text-white"
+                                ? "text-gray-900"
                                 : isDoneStage
-                                ? "text-green-400"
-                                : "text-white/40"
+                                ? "text-emerald-600"
+                                : "text-gray-400"
                             }`}
                           >
                             {label}
@@ -269,9 +260,8 @@ export default function VerifyPage() {
                   </div>
                 </div>
 
-                {/* Right: Live log */}
-                <div className="lg:col-span-2 h-[420px]">
-                  <h2 className="text-sm font-medium text-white/50 uppercase tracking-wider mb-4">
+                <div className="lg:col-span-2 h-[450px]">
+                  <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 pl-1">
                     Live Status
                   </h2>
                   <div className="h-full">
@@ -288,7 +278,6 @@ export default function VerifyPage() {
             </motion.div>
           )}
 
-          {/* Results view */}
           {isDone && report && (
             <motion.div
               key="results"
@@ -305,14 +294,13 @@ export default function VerifyPage() {
             </motion.div>
           )}
 
-          {/* Loading state if done but no report yet */}
           {isDone && !report && (
             <motion.div
               key="loading-report"
               className="flex flex-col items-center justify-center py-20 gap-4"
             >
-              <div className="w-10 h-10 border-2 border-white/20 border-t-white/80 rounded-full animate-spin" />
-              <p className="text-white/50">Loading report...</p>
+              <div className="w-10 h-10 border-4 border-gray-200 border-t-gray-900 rounded-full animate-spin" />
+              <p className="text-gray-500 font-medium">Loading report...</p>
             </motion.div>
           )}
         </AnimatePresence>

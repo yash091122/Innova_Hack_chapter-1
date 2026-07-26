@@ -22,8 +22,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark" data-scroll-behavior="smooth">
-      <body className={`${inter.variable} font-sans antialiased bg-gray-950 text-white`}>
+    <html lang="en" data-scroll-behavior="smooth">
+      <body className={`${inter.variable} font-sans antialiased`}>
+        {/* Liquid Glassmorphism Background (Global) */}
+        <div className="liquid-bg-container">
+          <div className="liquid-blob green" />
+          <div className="liquid-blob orange" />
+          <div className="liquid-blob pink" />
+        </div>
         {children}
       </body>
     </html>

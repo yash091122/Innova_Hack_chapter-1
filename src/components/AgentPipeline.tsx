@@ -74,15 +74,14 @@ function AgentNode({
       className={`
         relative w-44 px-4 py-3 rounded-2xl border-2 transition-all duration-500
         ${data.isActive
-          ? "border-white/40 bg-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+          ? "border-emerald-400 bg-white shadow-lg"
           : data.isComplete
-          ? "border-white/20 bg-white/5 backdrop-blur-md"
-          : "border-white/10 bg-transparent"
+          ? "border-gray-300 bg-gray-50 opacity-80"
+          : "border-gray-200 bg-white/50 opacity-60"
         }
-        ${data.isLoop ? "border-orange-400 shadow-[0_0_20px_rgba(251,146,60,0.4)]" : ""}
+        ${data.isLoop ? "border-orange-400 shadow-[0_0_20px_rgba(251,146,60,0.2)]" : ""}
       `}
     >
-      {/* React Flow edge connection handles — required for custom nodes */}
       <Handle
         type="target"
         position={Position.Left}
@@ -94,16 +93,17 @@ function AgentNode({
         style={{ background: "transparent", border: "none", width: 8, height: 8 }}
       />
 
-      {/* Pulse ring for active node */}
       {data.isActive && (
-        <div className="absolute inset-0 rounded-2xl border-2 border-white/40 animate-ping opacity-20" />
+        <div className="absolute inset-0 rounded-2xl border-2 border-emerald-400 animate-ping opacity-20" />
       )}
 
       <div className="flex items-center gap-2">
         <span className="text-2xl">{data.icon}</span>
         <div>
-          <div className="text-xs font-bold text-white">{data.label}</div>
-          <div className="text-xs text-white/70">{data.subtitle}</div>
+          <div className={`text-xs font-bold ${data.isActive ? "text-gray-900" : "text-gray-700"}`}>
+            {data.label}
+          </div>
+          <div className="text-xs text-gray-500 font-medium">{data.subtitle}</div>
         </div>
       </div>
 
@@ -112,7 +112,7 @@ function AgentNode({
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className="w-1.5 h-1.5 rounded-full bg-white/70 animate-bounce"
+              className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce"
               style={{ animationDelay: `${i * 0.15}s` }}
             />
           ))}
@@ -120,7 +120,7 @@ function AgentNode({
       )}
 
       {data.isComplete && !data.isActive && (
-        <div className="mt-1 text-xs text-white/70 font-medium">✓ Done</div>
+        <div className="mt-1 text-xs text-emerald-600 font-semibold">✓ Done</div>
       )}
     </div>
   );
@@ -202,26 +202,26 @@ export default function AgentPipeline({
       source: "research",
       target: "verification",
       animated: activeNodeId === "research" || activeNodeId === "verification",
-      style: { stroke: activeIdx >= 1 ? "#ffffff" : "#374151", strokeWidth: 2 },
-      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 1 ? "#ffffff" : "#374151" },
+      style: { stroke: activeIdx >= 1 ? "#10b981" : "#d1d5db", strokeWidth: 2 },
+      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 1 ? "#10b981" : "#d1d5db" },
     },
     {
       id: "v-c",
       source: "verification",
       target: "contradiction",
       animated: activeNodeId === "verification" || activeNodeId === "contradiction",
-      style: { stroke: activeIdx >= 2 ? "#ffffff" : "#374151", strokeWidth: 2 },
-      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 2 ? "#ffffff" : "#374151" },
+      style: { stroke: activeIdx >= 2 ? "#10b981" : "#d1d5db", strokeWidth: 2 },
+      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 2 ? "#10b981" : "#d1d5db" },
     },
     {
       id: "c-s",
       source: "contradiction",
       target: "synthesis",
       animated: activeNodeId === "synthesis",
-      style: { stroke: activeIdx >= 3 ? "#ffffff" : "#374151", strokeWidth: 2 },
+      style: { stroke: activeIdx >= 3 ? "#10b981" : "#d1d5db", strokeWidth: 2 },
       label: "No issues",
-      labelStyle: { fill: "#6b7280", fontSize: 10 },
-      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 3 ? "#ffffff" : "#374151" },
+      labelStyle: { fill: "#6b7280", fontSize: 10, fontWeight: 500 },
+      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 3 ? "#10b981" : "#d1d5db" },
     },
     {
       id: "feedback-loop",
@@ -230,22 +230,21 @@ export default function AgentPipeline({
       animated: loopTriggered,
       type: "smoothstep",
       style: {
-        stroke: loopTriggered ? "#f97316" : "#374151",
+        stroke: loopTriggered ? "#f97316" : "#d1d5db",
         strokeWidth: loopTriggered ? 3 : 1.5,
         strokeDasharray: loopTriggered ? undefined : "6 4",
       },
       label: loopTriggered ? "🔄 Issue detected!" : "Loop (issue detected)",
       labelStyle: {
-        fill: loopTriggered ? "#f97316" : "#6b7280",
+        fill: loopTriggered ? "#f97316" : "#9ca3af",
         fontSize: 10,
         fontWeight: loopTriggered ? "bold" : "normal",
       },
-      markerEnd: { type: MarkerType.ArrowClosed, color: loopTriggered ? "#f97316" : "#374151" },
+      markerEnd: { type: MarkerType.ArrowClosed, color: loopTriggered ? "#f97316" : "#d1d5db" },
       data: { curved: true },
     },
   ];
 
-  // Update node data reactively
   const nodes = initialNodes.map((node) => ({
     ...node,
     data: {
@@ -259,7 +258,7 @@ export default function AgentPipeline({
   }));
 
   return (
-    <div className="w-full h-64 rounded-2xl overflow-hidden border border-white/10 bg-gray-950/50">
+    <div className="w-full h-64 rounded-3xl overflow-hidden glass-card">
       <ReactFlow
         nodes={nodes}
         edges={initialEdges}
@@ -274,15 +273,14 @@ export default function AgentPipeline({
         zoomOnPinch={false}
         proOptions={{ hideAttribution: true }}
       >
-        <Background color="#1f2937" gap={20} size={1} />
+        <Background color="#e5e7eb" gap={20} size={1} />
       </ReactFlow>
 
-      {/* Claim progress indicator */}
       {claimProgress && claimProgress.total > 0 && (
-        <div className="px-4 py-2 bg-black/40 border-t border-white/10 flex items-center gap-3">
-          <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+        <div className="px-5 py-3 bg-white/60 backdrop-blur border-t border-gray-200 flex items-center gap-3">
+          <div className="flex-1 h-2 bg-gray-200/60 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-white/80 shadow-[0_0_10px_rgba(255,255,255,0.5)] rounded-full"
+              className="h-full bg-emerald-400 rounded-full"
               initial={{ width: 0 }}
               animate={{
                 width: `${(claimProgress.current / claimProgress.total) * 100}%`,
@@ -290,7 +288,7 @@ export default function AgentPipeline({
               transition={{ duration: 0.5 }}
             />
           </div>
-          <span className="text-xs text-white/50 whitespace-nowrap">
+          <span className="text-xs font-semibold text-gray-500 whitespace-nowrap">
             {claimProgress.current}/{claimProgress.total} claims
           </span>
         </div>

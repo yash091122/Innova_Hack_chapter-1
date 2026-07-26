@@ -17,13 +17,13 @@ function ConfidenceBadge({ score }: { score: number | null }) {
 
   const tier =
     score >= 75
-      ? { label: "HIGH", color: "bg-green-500/20 text-green-300 border-green-500/40" }
+      ? { label: "HIGH", color: "bg-green-50 text-green-700 border-green-200" }
       : score >= 40
-      ? { label: "MED", color: "bg-yellow-500/20 text-yellow-300 border-yellow-500/40" }
-      : { label: "LOW", color: "bg-red-500/20 text-red-300 border-red-500/40" };
+      ? { label: "MED", color: "bg-yellow-50 text-yellow-700 border-yellow-200" }
+      : { label: "LOW", color: "bg-red-50 text-red-700 border-red-200" };
 
   const ringColor =
-    score >= 75 ? "#22c55e" : score >= 40 ? "#eab308" : "#ef4444";
+    score >= 75 ? "#10b981" : score >= 40 ? "#f59e0b" : "#ef4444";
 
   return (
     <div className="flex items-center gap-2 flex-shrink-0">
@@ -35,7 +35,7 @@ function ConfidenceBadge({ score }: { score: number | null }) {
             cy="18"
             r="15.9"
             fill="none"
-            stroke="#1f2937"
+            stroke="#e5e7eb"
             strokeWidth="3"
           />
           <motion.circle
@@ -53,7 +53,7 @@ function ConfidenceBadge({ score }: { score: number | null }) {
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-xs font-bold text-white">{score}</span>
+          <span className="text-xs font-bold text-gray-900">{score}</span>
         </div>
       </div>
 
@@ -73,35 +73,35 @@ function StatusBadge({ status }: { status: ClaimState["verificationStatus"] }) {
   > = {
     confirmed: {
       label: "Confirmed",
-      color: "text-green-400",
-      dot: "bg-green-400",
+      color: "text-green-700",
+      dot: "bg-green-500",
     },
     partially_confirmed: {
       label: "Partial",
-      color: "text-yellow-400",
-      dot: "bg-yellow-400",
+      color: "text-yellow-700",
+      dot: "bg-yellow-500",
     },
     contradicted: {
       label: "Contradicted",
-      color: "text-red-400",
-      dot: "bg-red-400",
+      color: "text-red-700",
+      dot: "bg-red-500",
     },
     unverifiable: {
       label: "Unverifiable",
-      color: "text-gray-400",
+      color: "text-gray-500",
       dot: "bg-gray-400",
     },
     pending: {
       label: "Pending",
-      color: "text-blue-400",
-      dot: "bg-blue-400",
+      color: "text-blue-600",
+      dot: "bg-blue-500",
     },
   };
 
   const cfg = config[status] ?? config.pending;
 
   return (
-    <span className={`flex items-center gap-1.5 text-xs ${cfg.color}`}>
+    <span className={`flex items-center gap-1.5 text-xs font-medium ${cfg.color}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
       {cfg.label}
     </span>
@@ -130,17 +130,17 @@ export default function ClaimCard({ claim, index }: ClaimCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
       className={`
-        group relative rounded-2xl border p-5 transition-all duration-300
-        hover:shadow-lg hover:shadow-white/5
+        group relative rounded-3xl border p-5 transition-all duration-300
+        hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:-translate-y-0.5
         ${isProblematic
-          ? "border-red-500/30 bg-red-950/10 hover:border-red-500/50"
-          : "border-white/10 bg-white/3 hover:border-white/20 hover:bg-white/5"
+          ? "border-red-200 bg-red-50/80"
+          : "soft-card"
         }
       `}
     >
       {/* Top row: claim number + badges */}
       <div className="flex items-start gap-4">
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm font-bold text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-sm font-bold text-gray-900 shadow-sm">
           {index + 1}
         </div>
 
@@ -150,26 +150,26 @@ export default function ClaimCard({ claim, index }: ClaimCardProps) {
             <StatusBadge status={claim.verificationStatus} />
 
             {wasRereserached && (
-              <span className="px-2 py-0.5 rounded-md text-xs bg-orange-500/20 text-orange-300 border border-orange-500/30">
+              <span className="px-2 py-0.5 rounded-md text-xs bg-orange-50 text-orange-700 border border-orange-200 font-medium">
                 🔄 Re-verified {claim.attemptCount}×
               </span>
             )}
 
             {claim.severity === "high" && (
-              <span className="px-2 py-0.5 rounded-md text-xs bg-red-500/20 text-red-300 border border-red-500/30">
+              <span className="px-2 py-0.5 rounded-md text-xs bg-red-50 text-red-700 border border-red-200 font-medium">
                 ⚠️ High Severity
               </span>
             )}
           </div>
 
           {/* Claim text */}
-          <p className="text-sm text-white/90 leading-relaxed mb-3">
+          <p className="text-sm text-gray-900 leading-relaxed mb-3">
             {claim.claim}
           </p>
 
           {/* Source snippet */}
           {claim.sourceSnippet && (
-            <blockquote className="border-l-2 border-white/30 pl-3 mb-3 text-xs text-white/50 italic line-clamp-2">
+            <blockquote className="border-l-2 border-gray-300 pl-3 mb-3 text-xs text-gray-500 italic line-clamp-2">
               "{claim.sourceSnippet}"
             </blockquote>
           )}
@@ -179,7 +179,7 @@ export default function ClaimCard({ claim, index }: ClaimCardProps) {
             href={claim.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs text-white/70 hover:text-white transition-colors border-b border-transparent hover:border-white/50 pb-0.5"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-900 transition-colors border-b border-transparent hover:border-gray-400 pb-0.5"
           >
             <svg
               className="w-3 h-3"
@@ -204,7 +204,7 @@ export default function ClaimCard({ claim, index }: ClaimCardProps) {
 
       {/* Confidence reason */}
       {claim.confidenceReason && (
-        <div className="mt-3 pt-3 border-t border-white/5 text-xs text-white/50">
+        <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
           {claim.confidenceReason}
         </div>
       )}

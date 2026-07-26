@@ -152,12 +152,12 @@ export default function ExportButton({
       <motion.button
         onClick={handleMarkdownExport}
         disabled={exporting !== null}
-        whileHover={{ scale: 1.03 }}
+        whileHover={{ scale: 1.03, backgroundColor: "rgba(255,255,255,0.8)" }}
         whileTap={{ scale: 0.97 }}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 text-sm text-white/80 hover:text-white transition-all disabled:opacity-50"
+        className="flex items-center gap-2 px-4 py-2.5 rounded-2xl border border-gray-200 bg-white/50 text-sm font-medium text-gray-700 hover:text-gray-900 shadow-sm transition-all disabled:opacity-50"
       >
         {exporting === "md" ? (
-          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin" />
         ) : (
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -171,7 +171,7 @@ export default function ExportButton({
         disabled={exporting !== null}
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
-        className="flex items-center gap-2 px-5 py-2 rounded-xl bg-white/90 hover:bg-white text-sm font-medium text-black neumorphic-raised transition-all disabled:opacity-50"
+        className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gray-900 hover:bg-black text-white text-sm font-semibold shadow-lg shadow-gray-900/20 transition-all disabled:opacity-50"
       >
         {exporting === "pdf" ? (
           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

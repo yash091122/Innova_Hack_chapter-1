@@ -61,9 +61,9 @@ export default function ReportView({
   );
 
   const getBarColor = (status: string) => {
-    if (status === "confirmed") return "#22c55e";
-    if (status === "partially_confirmed") return "#eab308";
-    return "#ef4444";
+    if (status === "confirmed") return "#10b981"; // green-500
+    if (status === "partially_confirmed") return "#f59e0b"; // yellow-500
+    return "#ef4444"; // red-500
   };
 
   return (
@@ -72,16 +72,16 @@ export default function ReportView({
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10"
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-200"
       >
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <div className="w-2 h-2 rounded-full bg-green-400" />
-            <span className="text-sm text-green-400 font-medium">
+            <div className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className="text-sm text-emerald-600 font-bold tracking-wide uppercase">
               Verification Complete
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-white">{topic}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{topic}</h1>
         </div>
         <ExportButton
           sessionId={sessionId}
@@ -98,19 +98,19 @@ export default function ReportView({
         className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"
       >
         {[
-          { label: "Confirmed", value: stats.confirmed, color: "text-green-400" },
-          { label: "Partial", value: stats.partial, color: "text-yellow-400" },
-          { label: "Contradicted", value: stats.contradicted, color: "text-red-400" },
-          { label: "Unverifiable", value: stats.unverifiable, color: "text-gray-400" },
-          { label: "Avg Score", value: `${stats.avgScore}`, color: "text-white" },
-          { label: "Re-verified", value: stats.looped, color: "text-orange-400" },
+          { label: "Confirmed", value: stats.confirmed, color: "text-green-600" },
+          { label: "Partial", value: stats.partial, color: "text-yellow-600" },
+          { label: "Contradicted", value: stats.contradicted, color: "text-red-600" },
+          { label: "Unverifiable", value: stats.unverifiable, color: "text-gray-500" },
+          { label: "Avg Score", value: `${stats.avgScore}`, color: "text-gray-900" },
+          { label: "Re-verified", value: stats.looped, color: "text-orange-600" },
         ].map((stat) => (
           <div
             key={stat.label}
-            className="rounded-xl bg-white/5 border border-white/10 px-3 py-3 text-center"
+            className="rounded-2xl soft-card px-3 py-4 text-center border-gray-100"
           >
             <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-            <div className="text-xs text-white/50 mt-0.5">{stat.label}</div>
+            <div className="text-xs font-semibold text-gray-500 mt-1 uppercase tracking-wide">{stat.label}</div>
           </div>
         ))}
       </motion.div>
@@ -121,37 +121,42 @@ export default function ReportView({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="rounded-2xl border border-white/10 bg-white/3 p-5"
+          className="rounded-3xl soft-card p-6"
         >
-          <h3 className="text-sm font-semibold text-white/70 mb-4">
+          <h3 className="text-sm font-bold text-gray-500 mb-6 uppercase tracking-wider">
             Confidence Scores by Claim
           </h3>
-          <div className="h-40">
+          <div className="h-48">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} barSize={20}>
+              <BarChart data={chartData} barSize={24}>
                 <XAxis
                   dataKey="name"
-                  tick={{ fill: "#6b7280", fontSize: 11 }}
+                  tick={{ fill: "#6b7280", fontSize: 12, fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
+                  dy={10}
                 />
                 <YAxis
                   domain={[0, 100]}
-                  tick={{ fill: "#6b7280", fontSize: 11 }}
+                  tick={{ fill: "#6b7280", fontSize: 12, fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
+                  dx={-10}
                 />
                 <Tooltip
+                  cursor={{ fill: "rgba(0,0,0,0.03)" }}
                   contentStyle={{
-                    background: "#111827",
-                    border: "1px solid #374151",
-                    borderRadius: 8,
-                    color: "#f9fafb",
-                    fontSize: 12,
+                    background: "#ffffff",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: 12,
+                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                    color: "#111827",
+                    fontSize: 13,
+                    fontWeight: 500,
                   }}
                   formatter={(v) => [`${v ?? 0}/100`, "Confidence"]}
                 />
-                <Bar dataKey="score" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="score" radius={[6, 6, 0, 0]}>
                   {chartData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
@@ -167,7 +172,7 @@ export default function ReportView({
 
       {/* Claims grid */}
       <div>
-        <h2 className="text-lg font-semibold text-white mb-4">
+        <h2 className="text-lg font-bold text-gray-900 mb-4 pl-1">
           Verified Claims ({claims.length})
         </h2>
         <div className="space-y-4">
@@ -183,12 +188,12 @@ export default function ReportView({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="rounded-2xl border border-white/10 bg-white/3 p-6"
+          className="rounded-3xl soft-card p-8"
         >
-          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
             <span>📄</span> Full Report
           </h2>
-          <div className="prose prose-invert prose-sm max-w-none prose-headings:text-white prose-a:text-white/80 prose-a:no-underline hover:prose-a:underline prose-code:text-white/90 prose-blockquote:border-white/30">
+          <div className="prose prose-sm max-w-none prose-headings:text-gray-900 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-code:text-gray-900 prose-blockquote:border-gray-200">
             <ReactMarkdown>{finalReportMarkdown}</ReactMarkdown>
           </div>
         </motion.div>
