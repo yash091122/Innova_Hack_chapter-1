@@ -90,6 +90,21 @@ export async function runSynthesisAgent(
     })
   );
 
+  if (claims.length === 0) {
+    emitEvent(
+      sessionId,
+      createEvent(sessionId, {
+        type: "agent_log",
+        stage: "synthesis",
+        message: "No specific factual claims were extracted from the research.",
+      })
+    );
+    return {
+      claims: [],
+      finalReportMarkdown: `# No Factual Claims Found\n\nThe research agent could not extract any specific, verifiable factual claims for this topic.\n\n*Suggestion: Try a more specific factual query rather than a broad opinion-based topic.*`,
+    };
+  }
+
   // ── Step 1: Compute confidence scores (deterministic, no LLM needed)
   const scoredClaims = claims.map((claim) => ({
     ...claim,

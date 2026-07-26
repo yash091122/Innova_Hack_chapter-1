@@ -81,7 +81,8 @@ IMPORTANT RULES:
 - Each claim must be explicitly supported by the source text provided above
 - Include the EXACT URL from the [Source N] section for each claim
 - Include a direct quote or close paraphrase from the source as the snippet (max 200 chars)
-- Only extract falsifiable, specific facts (not opinions or predictions)
+- Extract specific technical facts, statistics, historical events, or objective feature comparisons
+- Avoid subjective opinions, but DO extract factual comparisons (e.g. "Database X supports ACID transactions while Database Y does not")
 - Extract 2-5 claims maximum from these results
 
 Respond with valid JSON:
