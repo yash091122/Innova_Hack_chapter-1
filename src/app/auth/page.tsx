@@ -18,7 +18,9 @@ import {
   CheckCircle2,
   AlertCircle,
   Sparkles,
-  ArrowLeft
+  ArrowLeft,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -32,6 +34,7 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   // If user is already logged in, redirect to home page with input console open
   useEffect(() => {
@@ -167,13 +170,24 @@ export default function AuthPage() {
               <div className="relative flex items-center">
                 <Lock className="w-4 h-4 text-slate-400 absolute left-4 pointer-events-none" />
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   required
-                  className="w-full bg-white pl-11 pr-4 py-3 rounded-full text-slate-900 placeholder-slate-400 text-xs font-semibold outline-none border border-slate-200 focus:border-emerald-500 shadow-inner transition-all"
+                  className="w-full bg-white pl-11 pr-11 py-3 rounded-full text-slate-900 placeholder-slate-400 text-xs font-semibold outline-none border border-slate-200 focus:border-emerald-500 shadow-inner transition-all"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 text-slate-400 hover:text-slate-600 transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
               </div>
             </div>
 
