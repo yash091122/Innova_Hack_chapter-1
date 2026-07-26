@@ -230,7 +230,7 @@ export default function AuthPage() {
 
           {/* Footer note */}
           <div className="text-center text-[11px] text-slate-500 font-medium border-t border-slate-200/60 pt-4">
-            <span>Secured with Supabase. URL: {!!process.env.NEXT_PUBLIC_SUPABASE_URL ? "YES" : "NO"}, KEY: {!!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? "YES" : "NO"}</span>
+            <span>Secured with Supabase Authentication & PostgreSQL</span>
           </div>
 
         </motion.div>
