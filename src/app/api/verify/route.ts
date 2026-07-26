@@ -77,24 +77,10 @@ export async function POST(request: NextRequest) {
     sessionId = `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   }
 
-  // Run pipeline in background (non-blocking)
-  // The pipeline communicates progress via SSE events
-  after(async () => {
-    try {
-      const { runPipeline } = await import("@/graph/pipeline");
-      await runPipeline(sessionId, topic.trim());
-    } catch (err) {
-      console.error(`[Pipeline] Background execution failed for ${sessionId}:`, err);
-      emitEvent(
-        sessionId,
-        createEvent(sessionId, {
-          type: "error",
-          stage: "error",
-          message: `Pipeline failed: ${err instanceof Error ? err.message : "Unknown error"}`,
-        })
-      );
-    }
-  });
+  // We no longer run the pipeline in the background here.
+  // Vercel serverless environments kill the container, or the SSE stream connects to a different container.
+  // Instead, the pipeline is started by the GET /api/verify/stream route.
+
 
   return NextResponse.json({
     sessionId,

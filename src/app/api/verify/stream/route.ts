@@ -98,6 +98,23 @@ export async function GET(request: NextRequest) {
               // Already closed
             }
           });
+
+          // In Vercel serverless environments, background tasks initiated in the POST route
+          // are either killed instantly or execute in a different isolated container.
+          // Because our stream-store uses an in-memory Map, the SSE stream and the pipeline
+          // MUST run in the exact same Node.js process. We start the pipeline here.
+          if (session && session.topic && session.status !== "done" && session.status !== "error") {
+            import("@/graph/pipeline").then(({ runPipeline }) => {
+              runPipeline(sessionId, session.topic).catch((err) => {
+                console.error("[SSE] Pipeline execution error:", err);
+                sendEvent(createEvent(sessionId, {
+                  type: "error",
+                  stage: "error",
+                  message: `Pipeline execution failed: ${err.message}`
+                }));
+              });
+            });
+          }
         })
         .catch((err) => {
           console.error("[SSE] Failed to check session status:", err);
