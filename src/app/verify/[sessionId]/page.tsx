@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import LiveStatusPanel from "@/components/LiveStatusPanel";
 import ReportView from "@/components/ReportView";
+import Navbar from "@/components/Navbar";
 import type { PipelineStage, ClaimState, SSEEvent } from "@/types";
 
 // Lazy-load React Flow to avoid SSR issues
@@ -160,37 +161,8 @@ export default function VerifyPage() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-orange-200/20 to-violet-200/20 blur-3xl pointer-events-none -z-10" />
 
       {/* Nav */}
-      <nav className="w-full sticky top-0 z-50 bg-white/70 backdrop-blur-2xl border-b border-white shadow-sm">
-        <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-          <button
-            onClick={() => router.push("/")}
-            className="flex items-center gap-3 group"
-          >
-            <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center text-white shadow-md">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            </div>
-            <span className="text-xl font-black tracking-tight text-slate-900 group-hover:text-emerald-600 transition-colors">
-              Fact<span className="text-slate-500 font-medium">Forge</span>
-            </span>
-          </button>
+      <Navbar />
 
-          <div className="flex items-center gap-3">
-            {currentStage === "done" ? (
-              <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-xs font-extrabold border border-emerald-200/60 shadow-sm">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                Pipeline Complete
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 text-slate-700 text-xs font-bold border border-white shadow-sm">
-                <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${stageGradient} flex items-center justify-center`}>
-                  <Loader2 className="w-3 h-3 text-white animate-spin" />
-                </div>
-                {STAGE_LABELS[currentStage] ?? currentStage}
-              </span>
-            )}
-          </div>
-        </div>
-      </nav>
 
       <div className="max-w-7xl mx-auto px-6 py-8 z-10 relative">
         <AnimatePresence mode="wait">

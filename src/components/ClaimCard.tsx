@@ -46,7 +46,7 @@ function ConfidenceBadge({ score }: { score: number | null }) {
             cy="18"
             r="15.9"
             fill="none"
-            stroke="#1e293b"
+            stroke="#e2e8f0"
             strokeWidth="3"
           />
           <motion.circle
@@ -64,7 +64,7 @@ function ConfidenceBadge({ score }: { score: number | null }) {
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-xs font-bold text-white font-mono">{score}%</span>
+          <span className="text-xs font-bold text-slate-900 font-mono">{score}%</span>
         </div>
       </div>
 
@@ -102,7 +102,7 @@ function StatusBadge({ status }: { status: ClaimState["verificationStatus"] }) {
       );
     case "unverifiable":
       return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200">
           <HelpCircle className="w-3.5 h-3.5" />
           Unverifiable
         </span>
@@ -142,14 +142,14 @@ export default function ClaimCard({ claim, index }: ClaimCardProps) {
         group relative rounded-3xl border p-5 transition-all duration-300 backdrop-blur-xl
         hover:shadow-2xl hover:-translate-y-0.5
         ${isProblematic
-          ? "border-red-500/30 bg-red-950/20"
-          : "soft-card border-slate-800 bg-slate-900/80 hover:border-slate-700"
+          ? "border-rose-200 bg-rose-50/80"
+          : "glass-card-light border-white bg-white/80 hover:border-slate-200"
         }
       `}
     >
       {/* Top row: claim index + status + badges */}
       <div className="flex items-start gap-4">
-        <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-emerald-400 font-mono shadow-sm">
+        <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-xs font-bold text-emerald-600 font-mono shadow-sm">
           #{index + 1}
         </div>
 
@@ -174,13 +174,13 @@ export default function ClaimCard({ claim, index }: ClaimCardProps) {
           </div>
 
           {/* Claim text */}
-          <p className="text-base text-white font-medium leading-relaxed mb-3">
+          <p className="text-base text-slate-900 font-medium leading-relaxed mb-3">
             {claim.claim}
           </p>
 
           {/* Source snippet */}
           {claim.sourceSnippet && (
-            <blockquote className="border-l-2 border-emerald-500/40 pl-3 mb-3 text-xs text-slate-400 italic line-clamp-2 bg-slate-950/40 py-1.5 rounded-r-lg">
+            <blockquote className="border-l-2 border-emerald-500/40 pl-3 mb-3 text-xs text-slate-600 italic line-clamp-2 bg-slate-50 py-1.5 rounded-r-lg">
               "{claim.sourceSnippet}"
             </blockquote>
           )}
@@ -190,9 +190,9 @@ export default function ClaimCard({ claim, index }: ClaimCardProps) {
             href={claim.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-400 hover:text-sky-300 transition-colors bg-sky-500/10 hover:bg-sky-500/20 px-3 py-1.5 rounded-lg border border-sky-500/20"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-600 hover:text-sky-700 transition-colors bg-sky-50 hover:bg-sky-100 px-3 py-1.5 rounded-lg border border-sky-200"
           >
-            <ExternalLink className="w-3.5 h-3.5 text-sky-400" />
+            <ExternalLink className="w-3.5 h-3.5 text-sky-600" />
             <span>{hostname}</span>
           </a>
         </div>
@@ -203,7 +203,7 @@ export default function ClaimCard({ claim, index }: ClaimCardProps) {
 
       {/* Confidence reason */}
       {claim.confidenceReason && (
-        <div className="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400 leading-relaxed flex items-start gap-2">
+        <div className="mt-4 pt-3 border-t border-slate-200 text-xs text-slate-600 leading-relaxed flex items-start gap-2">
           <span className="text-slate-500 font-semibold uppercase tracking-wider text-[10px] pt-0.5">Rationale:</span>
           <span className="flex-1">{claim.confidenceReason}</span>
         </div>

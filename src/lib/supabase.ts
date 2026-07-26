@@ -31,8 +31,8 @@ export function getSupabaseServerClient(): SupabaseClient | null {
 /** Public Supabase client for browser usage (uses anon key) */
 export function getSupabasePublicClient(): SupabaseClient | null {
   if (!_publicClient) {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!url || !key) {
       console.warn("[Supabase] Public client environment variables missing.");

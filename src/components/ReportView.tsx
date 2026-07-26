@@ -84,16 +84,16 @@ export default function ReportView({
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800"
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200"
       >
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold border border-emerald-500/20">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 text-xs font-bold border border-emerald-500/20">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
               Verification Complete
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{topic}</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{topic}</h1>
         </div>
         <ExportButton
           sessionId={sessionId}
@@ -110,12 +110,12 @@ export default function ReportView({
         className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"
       >
         {[
-          { label: "Confirmed", value: stats.confirmed, color: "text-emerald-400", icon: CheckCircle2, bg: "bg-emerald-500/10 border-emerald-500/20" },
-          { label: "Partial", value: stats.partial, color: "text-amber-400", icon: AlertTriangle, bg: "bg-amber-500/10 border-amber-500/20" },
-          { label: "Contradicted", value: stats.contradicted, color: "text-red-400", icon: XCircle, bg: "bg-red-500/10 border-red-500/20" },
-          { label: "Unverifiable", value: stats.unverifiable, color: "text-slate-400", icon: HelpCircle, bg: "bg-slate-800/80 border-slate-700" },
-          { label: "Avg Score", value: `${stats.avgScore}%`, color: "text-sky-400", icon: BarChart3, bg: "bg-sky-500/10 border-sky-500/20" },
-          { label: "Re-verified", value: stats.looped, color: "text-orange-400", icon: RefreshCw, bg: "bg-orange-500/10 border-orange-500/20" },
+          { label: "Confirmed", value: stats.confirmed, color: "text-emerald-600", icon: CheckCircle2, bg: "bg-emerald-50/80 border-emerald-200" },
+          { label: "Partial", value: stats.partial, color: "text-amber-600", icon: AlertTriangle, bg: "bg-amber-50/80 border-amber-200" },
+          { label: "Contradicted", value: stats.contradicted, color: "text-rose-600", icon: XCircle, bg: "bg-rose-50/80 border-rose-200" },
+          { label: "Unverifiable", value: stats.unverifiable, color: "text-slate-600", icon: HelpCircle, bg: "bg-slate-50/80 border-slate-200" },
+          { label: "Avg Score", value: `${stats.avgScore}%`, color: "text-sky-600", icon: BarChart3, bg: "bg-sky-50/80 border-sky-200" },
+          { label: "Re-verified", value: stats.looped, color: "text-orange-600", icon: RefreshCw, bg: "bg-orange-50/80 border-orange-200" },
         ].map((stat) => {
           const IconComp = stat.icon;
           return (
@@ -127,7 +127,7 @@ export default function ReportView({
                 <IconComp className={`w-4 h-4 ${stat.color}`} />
               </div>
               <div className={`text-2xl font-black font-mono ${stat.color}`}>{stat.value}</div>
-              <div className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-wider">{stat.label}</div>
+              <div className="text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-wider">{stat.label}</div>
             </div>
           );
         })}
@@ -139,11 +139,11 @@ export default function ReportView({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="rounded-3xl glass-card p-6 border border-slate-800"
+          className="rounded-3xl glass-card-light p-6 border border-white shadow-xl"
         >
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-emerald-400" />
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-emerald-500" />
               <span>Confidence Distribution by Claim</span>
             </h3>
           </div>
@@ -152,26 +152,26 @@ export default function ReportView({
               <BarChart data={chartData} barSize={28}>
                 <XAxis
                   dataKey="name"
-                  tick={{ fill: "#94a3b8", fontSize: 12, fontWeight: 600 }}
-                  axisLine={{ stroke: "#334155" }}
+                  tick={{ fill: "#64748b", fontSize: 12, fontWeight: 600 }}
+                  axisLine={{ stroke: "#e2e8f0" }}
                   tickLine={false}
                   dy={10}
                 />
                 <YAxis
                   domain={[0, 100]}
-                  tick={{ fill: "#94a3b8", fontSize: 12, fontWeight: 600 }}
-                  axisLine={{ stroke: "#334155" }}
+                  tick={{ fill: "#64748b", fontSize: 12, fontWeight: 600 }}
+                  axisLine={{ stroke: "#e2e8f0" }}
                   tickLine={false}
                   dx={-10}
                 />
                 <Tooltip
-                  cursor={{ fill: "rgba(255,255,255,0.03)" }}
+                  cursor={{ fill: "rgba(0,0,0,0.03)" }}
                   contentStyle={{
-                    background: "#0f172a",
-                    border: "1px solid #334155",
+                    background: "#ffffff",
+                    border: "1px solid #e2e8f0",
                     borderRadius: 12,
-                    boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
-                    color: "#f8fafc",
+                    boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+                    color: "#0f172a",
                     fontSize: 13,
                     fontWeight: 600,
                   }}
@@ -193,8 +193,8 @@ export default function ReportView({
 
       {/* Claims grid */}
       <div>
-        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-          <Layers className="w-5 h-5 text-emerald-400" />
+        <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <Layers className="w-5 h-5 text-emerald-500" />
           <span>Verified Claims ({claims.length})</span>
         </h2>
         <div className="space-y-4">
@@ -210,13 +210,13 @@ export default function ReportView({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="rounded-3xl glass-card p-8 border border-slate-800"
+          className="rounded-3xl glass-card-light p-8 border border-white shadow-xl"
         >
-          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2 border-b border-slate-800 pb-4">
-            <FileText className="w-5 h-5 text-emerald-400" />
+          <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2 border-b border-slate-200 pb-4">
+            <FileText className="w-5 h-5 text-emerald-500" />
             <span>Executive Synthesis Report</span>
           </h2>
-          <div className="prose prose-invert prose-sm max-w-none">
+          <div className="prose prose-slate prose-sm max-w-none">
             <ReactMarkdown>{finalReportMarkdown}</ReactMarkdown>
           </div>
         </motion.div>

@@ -22,7 +22,6 @@ import {
   Sparkles,
   ArrowRight,
   User,
-  ShoppingBag,
   RotateCcw,
   SearchCheck,
   Brain,
@@ -36,6 +35,7 @@ import {
   Sparkle
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import Navbar from "@/components/Navbar";
 
 // Reusable component for a single Glowing Glass Orb (User's Exact Component)
 const GlassOrb = ({
@@ -155,65 +155,8 @@ function HomeContent() {
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-t from-pink-300/35 via-purple-200/25 to-transparent blur-3xl pointer-events-none -z-10" />
 
       {/* TOP HEADER NAV BAR */}
-      <header className="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between z-20">
-        {/* Brand Logo */}
-        <div className="flex items-center gap-3 cursor-pointer" onClick={() => router.push("/")}>
-          <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center text-white shadow-md">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          </div>
-          <span className="text-xl font-black tracking-tight text-slate-900">
-            Fact<span className="text-slate-500 font-medium">Forge</span>
-          </span>
-        </div>
+      <Navbar />
 
-        {/* Navigation Links & Actions */}
-        <nav className="flex items-center gap-8">
-          <div className="hidden md:flex items-center gap-8 text-xs font-extrabold uppercase tracking-wider text-slate-700">
-            <a href="#features" className="hover:text-slate-950 transition-colors">FEATURES</a>
-            <a href="#pricing" className="hover:text-slate-950 transition-colors">PRICING</a>
-            <a href="/history" className="hover:text-slate-950 transition-colors">DEMO</a>
-          </div>
-
-          <div className="flex items-center gap-3">
-            {user ? (
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 text-slate-900 text-xs font-bold shadow-xs border border-white">
-                  <User className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="max-w-[120px] truncate">{user.email}</span>
-                </div>
-                <button
-                  onClick={() => signOut()}
-                  className="p-2 rounded-full bg-white/80 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-white shadow-xs transition-all"
-                  title="Sign Out"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => router.push("/auth")}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 hover:bg-white text-slate-800 text-xs font-bold shadow-xs border border-white transition-all"
-              >
-                <span>LOGIN</span>
-                <User className="w-3.5 h-3.5 text-slate-600" />
-              </button>
-            )}
-
-            <button
-              onClick={() => {
-                setShowInputConsole(!showInputConsole);
-                if (!showInputConsole) {
-                  setTimeout(() => inputRef.current?.focus(), 150);
-                }
-              }}
-              className="w-9 h-9 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-800 shadow-xs border border-white transition-all"
-              title="Custom Search Console"
-            >
-              <ShoppingBag className="w-4 h-4 text-slate-700" />
-            </button>
-          </div>
-        </nav>
-      </header>
 
       {/* MAIN CONTAINER */}
       <div className="w-full max-w-7xl mx-auto px-6 py-4 flex flex-col gap-14 z-10 flex-1">
