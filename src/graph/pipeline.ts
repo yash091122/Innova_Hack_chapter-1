@@ -261,7 +261,7 @@ export async function runPipeline(
 
   try {
     // Execute the LangGraph state machine
-    finalState = await graph.invoke(initialState);
+    finalState = await graph.invoke(initialState, { recursionLimit: 100 });
 
     // Mark done in Supabase
     const pipelineState = graphStateToPipelineState(finalState);
