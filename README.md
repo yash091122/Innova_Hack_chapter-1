@@ -1,4 +1,4 @@
-# VerifAI
+# FactForge
 
 **Autonomous Multi-Agent Research & Fact-Verification System**
 
