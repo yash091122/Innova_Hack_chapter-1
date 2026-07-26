@@ -124,6 +124,15 @@ function HomeContent() {
     const trimmed = topicText.trim();
     if (!trimmed) return;
 
+    // 1 Free Trial Limit for Unauthenticated Users
+    if (!isDemo && !user) {
+      const hasUsedTrial = localStorage.getItem("factforge_free_trial_used");
+      if (hasUsedTrial === "true") {
+        setError("You have used your 1 free trial. Please sign in to verify more claims.");
+        return;
+      }
+    }
+
     setLoading(true);
     setError("");
 
@@ -137,6 +146,11 @@ function HomeContent() {
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error ?? "Failed to start verification");
+      }
+
+      // Mark the trial as used upon successful submission
+      if (!isDemo && !user) {
+        localStorage.setItem("factforge_free_trial_used", "true");
       }
 
       const { sessionId } = await res.json();
