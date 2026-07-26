@@ -131,7 +131,7 @@ YOUR RESPONSIBILITIES:
    - H1 title with the research topic
    - Executive summary paragraph (3-5 sentences)
    - Claims section: each claim as a subsection with confidence badge, source link, and one-line reason
-   - IMPORTANT: Any claim that hit max re-research attempts AND is still "contradicted" or "unverifiable" MUST be clearly marked with ⚠️ WARNING
+   - IMPORTANT: Any claim that hit max re-research attempts AND is still "contradicted" or "unverifiable" MUST be clearly marked with WARNING
    - Methodology section briefly describing the 4-agent verification process
    - Disclaimer about AI-generated research
 

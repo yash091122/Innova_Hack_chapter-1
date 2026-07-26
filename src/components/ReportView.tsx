@@ -2,6 +2,7 @@
 
 /**
  * ReportView — Final report with Markdown rendering, analytics chart, and export
+ * STRICT: Official Lucide SVG icons only. No unicode symbol characters.
  */
 
 import { useMemo } from "react";
@@ -16,6 +17,17 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import {
+  CheckCircle2,
+  AlertTriangle,
+  XCircle,
+  HelpCircle,
+  BarChart3,
+  RefreshCw,
+  FileText,
+  Sparkles,
+  Layers
+} from "lucide-react";
 import ClaimCard from "./ClaimCard";
 import ExportButton from "./ExportButton";
 import type { ClaimState } from "@/types";
@@ -61,9 +73,9 @@ export default function ReportView({
   );
 
   const getBarColor = (status: string) => {
-    if (status === "confirmed") return "#10b981"; // green-500
-    if (status === "partially_confirmed") return "#f59e0b"; // yellow-500
-    return "#ef4444"; // red-500
+    if (status === "confirmed") return "#10b981";
+    if (status === "partially_confirmed") return "#f59e0b";
+    return "#ef4444";
   };
 
   return (
@@ -72,16 +84,16 @@ export default function ReportView({
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-200"
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800"
       >
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span className="text-sm text-emerald-600 font-bold tracking-wide uppercase">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold border border-emerald-500/20">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
               Verification Complete
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">{topic}</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{topic}</h1>
         </div>
         <ExportButton
           sessionId={sessionId}
@@ -98,21 +110,27 @@ export default function ReportView({
         className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"
       >
         {[
-          { label: "Confirmed", value: stats.confirmed, color: "text-green-600" },
-          { label: "Partial", value: stats.partial, color: "text-yellow-600" },
-          { label: "Contradicted", value: stats.contradicted, color: "text-red-600" },
-          { label: "Unverifiable", value: stats.unverifiable, color: "text-gray-500" },
-          { label: "Avg Score", value: `${stats.avgScore}`, color: "text-gray-900" },
-          { label: "Re-verified", value: stats.looped, color: "text-orange-600" },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-2xl soft-card px-3 py-4 text-center border-gray-100"
-          >
-            <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-            <div className="text-xs font-semibold text-gray-500 mt-1 uppercase tracking-wide">{stat.label}</div>
-          </div>
-        ))}
+          { label: "Confirmed", value: stats.confirmed, color: "text-emerald-400", icon: CheckCircle2, bg: "bg-emerald-500/10 border-emerald-500/20" },
+          { label: "Partial", value: stats.partial, color: "text-amber-400", icon: AlertTriangle, bg: "bg-amber-500/10 border-amber-500/20" },
+          { label: "Contradicted", value: stats.contradicted, color: "text-red-400", icon: XCircle, bg: "bg-red-500/10 border-red-500/20" },
+          { label: "Unverifiable", value: stats.unverifiable, color: "text-slate-400", icon: HelpCircle, bg: "bg-slate-800/80 border-slate-700" },
+          { label: "Avg Score", value: `${stats.avgScore}%`, color: "text-sky-400", icon: BarChart3, bg: "bg-sky-500/10 border-sky-500/20" },
+          { label: "Re-verified", value: stats.looped, color: "text-orange-400", icon: RefreshCw, bg: "bg-orange-500/10 border-orange-500/20" },
+        ].map((stat) => {
+          const IconComp = stat.icon;
+          return (
+            <div
+              key={stat.label}
+              className={`rounded-2xl p-4 text-center border backdrop-blur-xl ${stat.bg}`}
+            >
+              <div className="flex items-center justify-center mb-1">
+                <IconComp className={`w-4 h-4 ${stat.color}`} />
+              </div>
+              <div className={`text-2xl font-black font-mono ${stat.color}`}>{stat.value}</div>
+              <div className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-wider">{stat.label}</div>
+            </div>
+          );
+        })}
       </motion.div>
 
       {/* Confidence chart */}
@@ -121,42 +139,45 @@ export default function ReportView({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="rounded-3xl soft-card p-6"
+          className="rounded-3xl glass-card p-6 border border-slate-800"
         >
-          <h3 className="text-sm font-bold text-gray-500 mb-6 uppercase tracking-wider">
-            Confidence Scores by Claim
-          </h3>
-          <div className="h-48">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-emerald-400" />
+              <span>Confidence Distribution by Claim</span>
+            </h3>
+          </div>
+          <div className="h-52">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} barSize={24}>
+              <BarChart data={chartData} barSize={28}>
                 <XAxis
                   dataKey="name"
-                  tick={{ fill: "#6b7280", fontSize: 12, fontWeight: 500 }}
-                  axisLine={false}
+                  tick={{ fill: "#94a3b8", fontSize: 12, fontWeight: 600 }}
+                  axisLine={{ stroke: "#334155" }}
                   tickLine={false}
                   dy={10}
                 />
                 <YAxis
                   domain={[0, 100]}
-                  tick={{ fill: "#6b7280", fontSize: 12, fontWeight: 500 }}
-                  axisLine={false}
+                  tick={{ fill: "#94a3b8", fontSize: 12, fontWeight: 600 }}
+                  axisLine={{ stroke: "#334155" }}
                   tickLine={false}
                   dx={-10}
                 />
                 <Tooltip
-                  cursor={{ fill: "rgba(0,0,0,0.03)" }}
+                  cursor={{ fill: "rgba(255,255,255,0.03)" }}
                   contentStyle={{
-                    background: "#ffffff",
-                    border: "1px solid #e5e7eb",
+                    background: "#0f172a",
+                    border: "1px solid #334155",
                     borderRadius: 12,
-                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                    color: "#111827",
+                    boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
+                    color: "#f8fafc",
                     fontSize: 13,
-                    fontWeight: 500,
+                    fontWeight: 600,
                   }}
-                  formatter={(v) => [`${v ?? 0}/100`, "Confidence"]}
+                  formatter={(v) => [`${v ?? 0}%`, "Confidence Score"]}
                 />
-                <Bar dataKey="score" radius={[6, 6, 0, 0]}>
+                <Bar dataKey="score" radius={[8, 8, 0, 0]}>
                   {chartData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
@@ -172,8 +193,9 @@ export default function ReportView({
 
       {/* Claims grid */}
       <div>
-        <h2 className="text-lg font-bold text-gray-900 mb-4 pl-1">
-          Verified Claims ({claims.length})
+        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <Layers className="w-5 h-5 text-emerald-400" />
+          <span>Verified Claims ({claims.length})</span>
         </h2>
         <div className="space-y-4">
           {claims.map((claim, i) => (
@@ -188,12 +210,13 @@ export default function ReportView({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="rounded-3xl soft-card p-8"
+          className="rounded-3xl glass-card p-8 border border-slate-800"
         >
-          <h2 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <span>📄</span> Full Report
+          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2 border-b border-slate-800 pb-4">
+            <FileText className="w-5 h-5 text-emerald-400" />
+            <span>Executive Synthesis Report</span>
           </h2>
-          <div className="prose prose-sm max-w-none prose-headings:text-gray-900 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-code:text-gray-900 prose-blockquote:border-gray-200">
+          <div className="prose prose-invert prose-sm max-w-none">
             <ReactMarkdown>{finalReportMarkdown}</ReactMarkdown>
           </div>
         </motion.div>

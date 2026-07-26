@@ -130,8 +130,8 @@ export async function runResearchAgent(
       type: "stage_change",
       stage: "research",
       message: targetClaimId
-        ? `🔄 Re-researching flagged claim (feedback loop)...`
-        : `🔍 Agent 1: Breaking topic into sub-questions...`,
+        ? `Re-researching flagged claim (feedback loop)...`
+        : `Agent 1: Breaking topic into sub-questions...`,
     })
   );
 
@@ -164,7 +164,7 @@ export async function runResearchAgent(
         type: "loop_triggered",
         stage: "research",
         claimId: targetClaimId,
-        message: `🔄 Loop triggered: Re-researching claim "${existingClaim.claim.slice(0, 80)}..."`,
+        message: `Loop triggered: Re-researching claim "${existingClaim.claim.slice(0, 80)}..."`,
       })
     );
 
@@ -250,7 +250,7 @@ export async function runResearchAgent(
         createEvent(sessionId, {
           type: "agent_log",
           stage: "research",
-          message: `⚠️ No results found for sub-question ${i + 1}`,
+          message: `No results found for sub-question ${i + 1}`,
         })
       );
       continue;
@@ -289,7 +289,7 @@ export async function runResearchAgent(
       createEvent(sessionId, {
         type: "agent_log",
         stage: "research",
-        message: `✅ Extracted ${extracted.length} claims from sub-question ${i + 1}`,
+        message: `Extracted ${extracted.length} claims from sub-question ${i + 1}`,
       })
     );
   }

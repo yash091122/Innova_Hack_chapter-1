@@ -141,7 +141,7 @@ export async function runVerificationAgent(
     createEvent(sessionId, {
       type: "stage_change",
       stage: "verification",
-      message: `🔎 Agent 2: Verifying ${pendingClaims.length} claim(s) with independent sources...`,
+      message: `Agent 2: Verifying ${pendingClaims.length} claim(s) with independent sources...`,
       totalClaims: pendingClaims.length,
     })
   );
@@ -162,7 +162,7 @@ export async function runVerificationAgent(
         claimId: claim.id,
         claimIndex: i + 1,
         totalClaims: claims.length,
-        message: `🔍 Verifying claim ${i + 1}/${claims.length}: "${claim.claim.slice(0, 70)}..."`,
+        message: `Verifying claim ${i + 1}/${claims.length}: "${claim.claim.slice(0, 70)}..."`,
       })
     );
 
@@ -199,7 +199,7 @@ export async function runVerificationAgent(
     createEvent(sessionId, {
       type: "agent_log",
       stage: "verification",
-      message: `✅ Verification complete for all ${updatedClaims.length} claims`,
+      message: `Verification complete for all ${updatedClaims.length} claims`,
     })
   );
 

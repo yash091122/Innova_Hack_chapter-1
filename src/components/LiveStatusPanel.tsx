@@ -2,10 +2,22 @@
 
 /**
  * LiveStatusPanel — SSE-driven real-time agent progress log
+ * STRICT: Official Lucide SVG icons only. No unicode symbol characters.
  */
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  Terminal,
+  Play,
+  RefreshCw,
+  CheckCircle2,
+  XCircle,
+  Activity,
+  ChevronRight,
+  Wifi,
+  WifiOff
+} from "lucide-react";
 import type { SSEEvent, PipelineStage } from "@/types";
 
 interface LiveStatusPanelProps {
@@ -87,73 +99,81 @@ export default function LiveStatusPanel({
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
 
-  const getEventColor = (event: SSEEvent): string => {
+  const getEventStyle = (event: SSEEvent) => {
     switch (event.type) {
-      case "stage_change": return "text-gray-900 font-semibold";
-      case "loop_triggered": return "text-orange-600 font-semibold";
-      case "done": return "text-green-600 font-semibold";
-      case "error": return "text-red-600 font-semibold";
-      case "claim_update": return "text-blue-600";
-      default: return "text-gray-500";
-    }
-  };
-
-  const getEventIcon = (event: SSEEvent): string => {
-    switch (event.type) {
-      case "stage_change": return "▶";
-      case "loop_triggered": return "🔄";
-      case "done": return "✅";
-      case "error": return "❌";
-      case "claim_update": return "•";
-      default: return "›";
+      case "stage_change":
+        return { color: "text-emerald-400 font-semibold", icon: Play };
+      case "loop_triggered":
+        return { color: "text-amber-400 font-semibold", icon: RefreshCw };
+      case "done":
+        return { color: "text-teal-300 font-semibold", icon: CheckCircle2 };
+      case "error":
+        return { color: "text-red-400 font-semibold", icon: XCircle };
+      case "claim_update":
+        return { color: "text-sky-300", icon: Activity };
+      default:
+        return { color: "text-slate-400", icon: ChevronRight };
     }
   };
 
   return (
-    <div className="h-full flex flex-col rounded-3xl glass-card overflow-hidden">
+    <div className="h-full flex flex-col rounded-3xl glass-card border border-slate-800 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-200/50 bg-white/40">
-        <div
-          className={`w-2 h-2 rounded-full ${
-            connected ? "bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" : "bg-gray-300"
-          }`}
-        />
-        <span className="text-sm font-bold text-gray-900">
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-800 bg-slate-900/60">
+        <Terminal className="w-4 h-4 text-emerald-400" />
+        <span className="text-sm font-bold text-white">
           {connected ? "Live Pipeline Log" : "Pipeline Log"}
         </span>
-        <span className="ml-auto text-xs font-medium text-gray-400">
-          {logs.length} events
-        </span>
+        
+        <div className="ml-auto flex items-center gap-2">
+          {connected ? (
+            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-medium border border-emerald-500/20">
+              <Wifi className="w-3 h-3 animate-pulse" />
+              Live Stream
+            </span>
+          ) : (
+            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 text-xs font-medium border border-slate-700">
+              <WifiOff className="w-3 h-3" />
+              Offline
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Log entries */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-2 font-mono text-xs">
+      <div className="flex-1 overflow-y-auto p-4 space-y-2 font-mono text-xs bg-slate-950/80">
         {logs.length === 0 ? (
-          <div className="text-gray-400 font-medium text-center py-8">
-            Waiting for pipeline to start...
+          <div className="text-slate-500 font-medium text-center py-12 flex flex-col items-center gap-2">
+            <Activity className="w-6 h-6 animate-pulse text-slate-600" />
+            <span>Initializing agent execution telemetry...</span>
           </div>
         ) : (
           <AnimatePresence initial={false}>
-            {logs.map(({ id, event }) => (
-              <motion.div
-                key={id}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.2 }}
-                className={`flex gap-2.5 ${getEventColor(event)}`}
-              >
-                <span className="flex-shrink-0 text-gray-400 font-medium">
-                  {new Date(event.timestamp).toLocaleTimeString("en", {
-                    hour12: false,
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                  })}
-                </span>
-                <span className="flex-shrink-0">{getEventIcon(event)}</span>
-                <span className="break-all">{event.message}</span>
-              </motion.div>
-            ))}
+            {logs.map(({ id, event }) => {
+              const { color, icon: IconComp } = getEventStyle(event);
+              return (
+                <motion.div
+                  key={id}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className={`flex items-start gap-2.5 p-1.5 rounded-lg hover:bg-white/5 transition-colors ${color}`}
+                >
+                  <span className="flex-shrink-0 text-slate-500 font-medium text-[11px] pt-0.5">
+                    {new Date(event.timestamp).toLocaleTimeString("en", {
+                      hour12: false,
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                  </span>
+                  <span className="flex-shrink-0 pt-0.5">
+                    <IconComp className="w-3.5 h-3.5" />
+                  </span>
+                  <span className="break-all leading-relaxed">{event.message}</span>
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         )}
         <div ref={logEndRef} />
@@ -161,21 +181,24 @@ export default function LiveStatusPanel({
 
       {/* Connection status footer */}
       {connected && (
-        <div className="px-5 py-3 border-t border-gray-200/50 bg-white/40">
-          <div className="flex items-center gap-2">
-            <div className="flex gap-0.5">
-              {[0, 1, 2].map((i) => (
-                <div
-                  key={i}
-                  className="w-1 bg-gray-400 rounded-full animate-pulse"
-                  style={{
-                    height: `${8 + i * 4}px`,
-                    animationDelay: `${i * 0.2}s`,
-                  }}
-                />
-              ))}
+        <div className="px-5 py-3 border-t border-slate-800 bg-slate-900/60">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1">
+                {[0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className="w-1 bg-emerald-400 rounded-full animate-pulse"
+                    style={{
+                      height: `${10 + i * 3}px`,
+                      animationDelay: `${i * 0.2}s`,
+                    }}
+                  />
+                ))}
+              </div>
+              <span className="text-xs font-medium text-slate-400">Receiving live agent events...</span>
             </div>
-            <span className="text-xs font-medium text-gray-500">Streaming live updates...</span>
+            <span className="text-[11px] font-mono text-slate-500">{logs.length} entries</span>
           </div>
         </div>
       )}

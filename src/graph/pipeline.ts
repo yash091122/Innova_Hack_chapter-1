@@ -163,7 +163,7 @@ async function setReresearchTargetNode(
       type: "loop_triggered",
       stage: "contradiction_check",
       claimId: targetId ?? undefined,
-      message: `🔄 Feedback loop: targeting claim for re-research`,
+      message: `Feedback loop: targeting claim for re-research`,
     })
   );
 

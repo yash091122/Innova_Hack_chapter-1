@@ -2,9 +2,20 @@
 
 /**
  * ClaimCard — Individual claim with confidence badge, source, and re-verification tag
+ * STRICT: Official Lucide SVG icons only. No unicode symbol characters.
  */
 
 import { motion } from "framer-motion";
+import {
+  CheckCircle2,
+  AlertTriangle,
+  XCircle,
+  HelpCircle,
+  RefreshCw,
+  ExternalLink,
+  ShieldAlert,
+  Clock
+} from "lucide-react";
 import type { ClaimState } from "@/types";
 
 interface ClaimCardProps {
@@ -17,16 +28,16 @@ function ConfidenceBadge({ score }: { score: number | null }) {
 
   const tier =
     score >= 75
-      ? { label: "HIGH", color: "bg-green-50 text-green-700 border-green-200" }
+      ? { label: "HIGH CONFIDENCE", color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" }
       : score >= 40
-      ? { label: "MED", color: "bg-yellow-50 text-yellow-700 border-yellow-200" }
-      : { label: "LOW", color: "bg-red-50 text-red-700 border-red-200" };
+      ? { label: "MED CONFIDENCE", color: "bg-amber-500/10 text-amber-400 border-amber-500/30" }
+      : { label: "LOW CONFIDENCE", color: "bg-red-500/10 text-red-400 border-red-500/30" };
 
   const ringColor =
     score >= 75 ? "#10b981" : score >= 40 ? "#f59e0b" : "#ef4444";
 
   return (
-    <div className="flex items-center gap-2 flex-shrink-0">
+    <div className="flex flex-col items-center gap-1.5 flex-shrink-0">
       {/* Radial score indicator */}
       <div className="relative w-14 h-14">
         <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
@@ -35,7 +46,7 @@ function ConfidenceBadge({ score }: { score: number | null }) {
             cy="18"
             r="15.9"
             fill="none"
-            stroke="#e5e7eb"
+            stroke="#1e293b"
             strokeWidth="3"
           />
           <motion.circle
@@ -53,12 +64,12 @@ function ConfidenceBadge({ score }: { score: number | null }) {
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-xs font-bold text-gray-900">{score}</span>
+          <span className="text-xs font-bold text-white font-mono">{score}%</span>
         </div>
       </div>
 
       <span
-        className={`px-2 py-0.5 rounded-md text-xs font-bold border ${tier.color}`}
+        className={`px-2 py-0.5 rounded-md text-[10px] font-bold border tracking-wider ${tier.color}`}
       >
         {tier.label}
       </span>
@@ -67,45 +78,43 @@ function ConfidenceBadge({ score }: { score: number | null }) {
 }
 
 function StatusBadge({ status }: { status: ClaimState["verificationStatus"] }) {
-  const config: Record<
-    string,
-    { label: string; color: string; dot: string }
-  > = {
-    confirmed: {
-      label: "Confirmed",
-      color: "text-green-700",
-      dot: "bg-green-500",
-    },
-    partially_confirmed: {
-      label: "Partial",
-      color: "text-yellow-700",
-      dot: "bg-yellow-500",
-    },
-    contradicted: {
-      label: "Contradicted",
-      color: "text-red-700",
-      dot: "bg-red-500",
-    },
-    unverifiable: {
-      label: "Unverifiable",
-      color: "text-gray-500",
-      dot: "bg-gray-400",
-    },
-    pending: {
-      label: "Pending",
-      color: "text-blue-600",
-      dot: "bg-blue-500",
-    },
-  };
-
-  const cfg = config[status] ?? config.pending;
-
-  return (
-    <span className={`flex items-center gap-1.5 text-xs font-medium ${cfg.color}`}>
-      <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
-      {cfg.label}
-    </span>
-  );
+  switch (status) {
+    case "confirmed":
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <CheckCircle2 className="w-3.5 h-3.5" />
+          Confirmed
+        </span>
+      );
+    case "partially_confirmed":
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+          <AlertTriangle className="w-3.5 h-3.5" />
+          Partial
+        </span>
+      );
+    case "contradicted":
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">
+          <XCircle className="w-3.5 h-3.5" />
+          Contradicted
+        </span>
+      );
+    case "unverifiable":
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700">
+          <HelpCircle className="w-3.5 h-3.5" />
+          Unverifiable
+        </span>
+      );
+    default:
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          <Clock className="w-3.5 h-3.5 animate-spin" />
+          Pending
+        </span>
+      );
+  }
 }
 
 export default function ClaimCard({ claim, index }: ClaimCardProps) {
@@ -126,50 +135,52 @@ export default function ClaimCard({ claim, index }: ClaimCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.08 }}
+      transition={{ duration: 0.35, delay: index * 0.06 }}
       className={`
-        group relative rounded-3xl border p-5 transition-all duration-300
-        hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:-translate-y-0.5
+        group relative rounded-3xl border p-5 transition-all duration-300 backdrop-blur-xl
+        hover:shadow-2xl hover:-translate-y-0.5
         ${isProblematic
-          ? "border-red-200 bg-red-50/80"
-          : "soft-card"
+          ? "border-red-500/30 bg-red-950/20"
+          : "soft-card border-slate-800 bg-slate-900/80 hover:border-slate-700"
         }
       `}
     >
-      {/* Top row: claim number + badges */}
+      {/* Top row: claim index + status + badges */}
       <div className="flex items-start gap-4">
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-sm font-bold text-gray-900 shadow-sm">
-          {index + 1}
+        <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-emerald-400 font-mono shadow-sm">
+          #{index + 1}
         </div>
 
         <div className="flex-1 min-w-0">
           {/* Status row */}
-          <div className="flex flex-wrap items-center gap-2 mb-2">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
             <StatusBadge status={claim.verificationStatus} />
 
             {wasRereserached && (
-              <span className="px-2 py-0.5 rounded-md text-xs bg-orange-50 text-orange-700 border border-orange-200 font-medium">
-                🔄 Re-verified {claim.attemptCount}×
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                <RefreshCw className="w-3 h-3 text-amber-400" />
+                Re-verified {claim.attemptCount}x
               </span>
             )}
 
             {claim.severity === "high" && (
-              <span className="px-2 py-0.5 rounded-md text-xs bg-red-50 text-red-700 border border-red-200 font-medium">
-                ⚠️ High Severity
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/30">
+                <ShieldAlert className="w-3 h-3" />
+                High Severity
               </span>
             )}
           </div>
 
           {/* Claim text */}
-          <p className="text-sm text-gray-900 leading-relaxed mb-3">
+          <p className="text-base text-white font-medium leading-relaxed mb-3">
             {claim.claim}
           </p>
 
           {/* Source snippet */}
           {claim.sourceSnippet && (
-            <blockquote className="border-l-2 border-gray-300 pl-3 mb-3 text-xs text-gray-500 italic line-clamp-2">
+            <blockquote className="border-l-2 border-emerald-500/40 pl-3 mb-3 text-xs text-slate-400 italic line-clamp-2 bg-slate-950/40 py-1.5 rounded-r-lg">
               "{claim.sourceSnippet}"
             </blockquote>
           )}
@@ -179,22 +190,10 @@ export default function ClaimCard({ claim, index }: ClaimCardProps) {
             href={claim.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-900 transition-colors border-b border-transparent hover:border-gray-400 pb-0.5"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-400 hover:text-sky-300 transition-colors bg-sky-500/10 hover:bg-sky-500/20 px-3 py-1.5 rounded-lg border border-sky-500/20"
           >
-            <svg
-              className="w-3 h-3"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
-            {hostname}
+            <ExternalLink className="w-3.5 h-3.5 text-sky-400" />
+            <span>{hostname}</span>
           </a>
         </div>
 
@@ -204,8 +203,9 @@ export default function ClaimCard({ claim, index }: ClaimCardProps) {
 
       {/* Confidence reason */}
       {claim.confidenceReason && (
-        <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
-          {claim.confidenceReason}
+        <div className="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400 leading-relaxed flex items-start gap-2">
+          <span className="text-slate-500 font-semibold uppercase tracking-wider text-[10px] pt-0.5">Rationale:</span>
+          <span className="flex-1">{claim.confidenceReason}</span>
         </div>
       )}
     </motion.div>

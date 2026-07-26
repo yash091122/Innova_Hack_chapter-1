@@ -2,7 +2,7 @@
 
 /**
  * AgentPipeline — React Flow visualization of the 4-agent pipeline
- * Shows active stage with pulse animation and animated feedback loop edge
+ * STRICT: Official Lucide SVG icons only. No unicode symbol characters.
  */
 
 import React, { useMemo } from "react";
@@ -16,6 +16,16 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { motion } from "framer-motion";
+import {
+  Search,
+  ShieldCheck,
+  GitCompare,
+  Sparkles,
+  CheckCircle2,
+  Loader2,
+  RefreshCw,
+  LucideIcon
+} from "lucide-react";
 import type { PipelineStage } from "@/types";
 
 interface AgentPipelineProps {
@@ -32,30 +42,30 @@ const STAGE_TO_NODE: Record<string, string> = {
   done: "synthesis",
 };
 
-const NODE_LABELS: Record<string, { title: string; subtitle: string; icon: string }> = {
+const NODE_CONFIG: Record<string, { title: string; subtitle: string; icon: LucideIcon }> = {
   research: {
     title: "Agent 1",
     subtitle: "Research",
-    icon: "🔍",
+    icon: Search,
   },
   verification: {
     title: "Agent 2",
     subtitle: "Verification",
-    icon: "🔎",
+    icon: ShieldCheck,
   },
   contradiction: {
     title: "Agent 3",
-    subtitle: "Contradiction Check",
-    icon: "🔬",
+    subtitle: "Contradiction",
+    icon: GitCompare,
   },
   synthesis: {
     title: "Agent 4",
     subtitle: "Synthesis",
-    icon: "📝",
+    icon: Sparkles,
   },
 };
 
-// Custom node component
+// Custom node component with dark glass styling
 function AgentNode({
   data,
 }: {
@@ -64,22 +74,24 @@ function AgentNode({
     isActive: boolean;
     isComplete: boolean;
     isLoop: boolean;
-    label: string;
+    title: string;
     subtitle: string;
-    icon: string;
+    icon: LucideIcon;
   };
 }) {
+  const IconComponent = data.icon;
+
   return (
     <div
       className={`
-        relative w-44 px-4 py-3 rounded-2xl border-2 transition-all duration-500
+        relative w-48 px-4 py-3.5 rounded-2xl border transition-all duration-500 backdrop-blur-xl
         ${data.isActive
-          ? "border-emerald-400 bg-white shadow-lg"
+          ? "border-emerald-400 bg-slate-900/95 shadow-[0_0_25px_rgba(16,185,129,0.25)] scale-105"
           : data.isComplete
-          ? "border-gray-300 bg-gray-50 opacity-80"
-          : "border-gray-200 bg-white/50 opacity-60"
+          ? "border-emerald-500/40 bg-slate-900/80 shadow-md"
+          : "border-slate-800 bg-slate-950/60 opacity-60"
         }
-        ${data.isLoop ? "border-orange-400 shadow-[0_0_20px_rgba(251,146,60,0.2)]" : ""}
+        ${data.isLoop ? "border-amber-400 bg-slate-900/95 shadow-[0_0_25px_rgba(245,158,11,0.3)]" : ""}
       `}
     >
       <Handle
@@ -94,33 +106,64 @@ function AgentNode({
       />
 
       {data.isActive && (
-        <div className="absolute inset-0 rounded-2xl border-2 border-emerald-400 animate-ping opacity-20" />
+        <div className="absolute inset-0 rounded-2xl border border-emerald-400 animate-pulse opacity-40" />
       )}
 
-      <div className="flex items-center gap-2">
-        <span className="text-2xl">{data.icon}</span>
-        <div>
-          <div className={`text-xs font-bold ${data.isActive ? "text-gray-900" : "text-gray-700"}`}>
-            {data.label}
+      <div className="flex items-center gap-3">
+        <div
+          className={`w-9 h-9 rounded-xl flex items-center justify-center border transition-colors ${
+            data.isActive
+              ? "bg-emerald-500/20 border-emerald-400/50 text-emerald-300"
+              : data.isComplete
+              ? "bg-emerald-950/40 border-emerald-500/30 text-emerald-400"
+              : "bg-slate-900 border-slate-800 text-slate-500"
+          }`}
+        >
+          {data.isActive ? (
+            <Loader2 className="w-5 h-5 animate-spin text-emerald-400" />
+          ) : (
+            <IconComponent className="w-5 h-5" />
+          )}
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <div className={`text-xs font-bold ${data.isActive ? "text-white" : "text-slate-200"}`}>
+            {data.title}
           </div>
-          <div className="text-xs text-gray-500 font-medium">{data.subtitle}</div>
+          <div className="text-[11px] text-slate-400 font-medium truncate">{data.subtitle}</div>
         </div>
       </div>
 
       {data.isActive && (
-        <div className="mt-2 flex gap-1">
-          {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce"
-              style={{ animationDelay: `${i * 0.15}s` }}
-            />
-          ))}
+        <div className="mt-2.5 flex items-center justify-between border-t border-slate-800/80 pt-2">
+          <span className="text-[10px] font-semibold text-emerald-400 flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+            Processing...
+          </span>
+          <div className="flex gap-1">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="w-1 h-1 rounded-full bg-emerald-400 animate-bounce"
+                style={{ animationDelay: `${i * 0.15}s` }}
+              />
+            ))}
+          </div>
         </div>
       )}
 
       {data.isComplete && !data.isActive && (
-        <div className="mt-1 text-xs text-emerald-600 font-semibold">✓ Done</div>
+        <div className="mt-2 flex items-center gap-1 text-[11px] text-emerald-400 font-semibold border-t border-slate-800/60 pt-1.5">
+          <CheckCircle2 className="w-3.5 h-3.5" />
+          <span>Complete</span>
+        </div>
+      )}
+
+      {data.isLoop && (
+        <div className="mt-2 flex items-center gap-1 text-[11px] text-amber-400 font-semibold border-t border-slate-800/60 pt-1.5">
+          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+          <span>Re-researching</span>
+        </div>
       )}
     </div>
   );
@@ -141,13 +184,13 @@ export default function AgentPipeline({
     {
       id: "research",
       type: "agentNode",
-      position: { x: 0, y: 100 },
+      position: { x: 0, y: 80 },
       data: {
         id: "research",
         isActive: activeNodeId === "research",
         isComplete: activeIdx > 0 && !loopTriggered,
         isLoop: loopTriggered && activeNodeId === "research",
-        ...NODE_LABELS.research,
+        ...NODE_CONFIG.research,
       },
       sourcePosition: Position.Right,
       targetPosition: Position.Left,
@@ -155,13 +198,13 @@ export default function AgentPipeline({
     {
       id: "verification",
       type: "agentNode",
-      position: { x: 220, y: 100 },
+      position: { x: 230, y: 80 },
       data: {
         id: "verification",
         isActive: activeNodeId === "verification",
         isComplete: activeIdx > 1,
         isLoop: false,
-        ...NODE_LABELS.verification,
+        ...NODE_CONFIG.verification,
       },
       sourcePosition: Position.Right,
       targetPosition: Position.Left,
@@ -169,13 +212,13 @@ export default function AgentPipeline({
     {
       id: "contradiction",
       type: "agentNode",
-      position: { x: 440, y: 100 },
+      position: { x: 460, y: 80 },
       data: {
         id: "contradiction",
         isActive: activeNodeId === "contradiction",
         isComplete: activeIdx > 2 && !loopTriggered,
         isLoop: loopTriggered,
-        ...NODE_LABELS.contradiction,
+        ...NODE_CONFIG.contradiction,
       },
       sourcePosition: Position.Right,
       targetPosition: Position.Left,
@@ -183,13 +226,13 @@ export default function AgentPipeline({
     {
       id: "synthesis",
       type: "agentNode",
-      position: { x: 660, y: 100 },
+      position: { x: 690, y: 80 },
       data: {
         id: "synthesis",
         isActive: activeNodeId === "synthesis",
         isComplete: currentStage === "done",
         isLoop: false,
-        ...NODE_LABELS.synthesis,
+        ...NODE_CONFIG.synthesis,
       },
       sourcePosition: Position.Right,
       targetPosition: Position.Left,
@@ -202,26 +245,26 @@ export default function AgentPipeline({
       source: "research",
       target: "verification",
       animated: activeNodeId === "research" || activeNodeId === "verification",
-      style: { stroke: activeIdx >= 1 ? "#10b981" : "#d1d5db", strokeWidth: 2 },
-      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 1 ? "#10b981" : "#d1d5db" },
+      style: { stroke: activeIdx >= 1 ? "#10b981" : "#334155", strokeWidth: 2 },
+      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 1 ? "#10b981" : "#334155" },
     },
     {
       id: "v-c",
       source: "verification",
       target: "contradiction",
       animated: activeNodeId === "verification" || activeNodeId === "contradiction",
-      style: { stroke: activeIdx >= 2 ? "#10b981" : "#d1d5db", strokeWidth: 2 },
-      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 2 ? "#10b981" : "#d1d5db" },
+      style: { stroke: activeIdx >= 2 ? "#10b981" : "#334155", strokeWidth: 2 },
+      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 2 ? "#10b981" : "#334155" },
     },
     {
       id: "c-s",
       source: "contradiction",
       target: "synthesis",
       animated: activeNodeId === "synthesis",
-      style: { stroke: activeIdx >= 3 ? "#10b981" : "#d1d5db", strokeWidth: 2 },
-      label: "No issues",
-      labelStyle: { fill: "#6b7280", fontSize: 10, fontWeight: 500 },
-      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 3 ? "#10b981" : "#d1d5db" },
+      style: { stroke: activeIdx >= 3 ? "#10b981" : "#334155", strokeWidth: 2 },
+      label: "Verified",
+      labelStyle: { fill: "#94a3b8", fontSize: 10, fontWeight: 600 },
+      markerEnd: { type: MarkerType.ArrowClosed, color: activeIdx >= 3 ? "#10b981" : "#334155" },
     },
     {
       id: "feedback-loop",
@@ -230,18 +273,17 @@ export default function AgentPipeline({
       animated: loopTriggered,
       type: "smoothstep",
       style: {
-        stroke: loopTriggered ? "#f97316" : "#d1d5db",
+        stroke: loopTriggered ? "#f59e0b" : "#334155",
         strokeWidth: loopTriggered ? 3 : 1.5,
         strokeDasharray: loopTriggered ? undefined : "6 4",
       },
-      label: loopTriggered ? "🔄 Issue detected!" : "Loop (issue detected)",
+      label: loopTriggered ? "Issue Detected!" : "Feedback Loop",
       labelStyle: {
-        fill: loopTriggered ? "#f97316" : "#9ca3af",
+        fill: loopTriggered ? "#f59e0b" : "#64748b",
         fontSize: 10,
         fontWeight: loopTriggered ? "bold" : "normal",
       },
-      markerEnd: { type: MarkerType.ArrowClosed, color: loopTriggered ? "#f97316" : "#d1d5db" },
-      data: { curved: true },
+      markerEnd: { type: MarkerType.ArrowClosed, color: loopTriggered ? "#f59e0b" : "#334155" },
     },
   ];
 
@@ -258,29 +300,31 @@ export default function AgentPipeline({
   }));
 
   return (
-    <div className="w-full h-64 rounded-3xl overflow-hidden glass-card">
-      <ReactFlow
-        nodes={nodes}
-        edges={initialEdges}
-        nodeTypes={nodeTypes}
-        fitView
-        fitViewOptions={{ padding: 0.3 }}
-        nodesDraggable={false}
-        nodesConnectable={false}
-        elementsSelectable={false}
-        panOnDrag={false}
-        zoomOnScroll={false}
-        zoomOnPinch={false}
-        proOptions={{ hideAttribution: true }}
-      >
-        <Background color="#e5e7eb" gap={20} size={1} />
-      </ReactFlow>
+    <div className="w-full h-72 rounded-3xl overflow-hidden glass-card border border-slate-800 flex flex-col justify-between">
+      <div className="flex-1 w-full relative">
+        <ReactFlow
+          nodes={nodes}
+          edges={initialEdges}
+          nodeTypes={nodeTypes}
+          fitView
+          fitViewOptions={{ padding: 0.3 }}
+          nodesDraggable={false}
+          nodesConnectable={false}
+          elementsSelectable={false}
+          panOnDrag={false}
+          zoomOnScroll={false}
+          zoomOnPinch={false}
+          proOptions={{ hideAttribution: true }}
+        >
+          <Background color="#1e293b" gap={20} size={1} />
+        </ReactFlow>
+      </div>
 
       {claimProgress && claimProgress.total > 0 && (
-        <div className="px-5 py-3 bg-white/60 backdrop-blur border-t border-gray-200 flex items-center gap-3">
-          <div className="flex-1 h-2 bg-gray-200/60 rounded-full overflow-hidden">
+        <div className="px-5 py-3 bg-slate-900/90 backdrop-blur border-t border-slate-800 flex items-center gap-4">
+          <div className="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-emerald-400 rounded-full"
+              className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full"
               initial={{ width: 0 }}
               animate={{
                 width: `${(claimProgress.current / claimProgress.total) * 100}%`,
@@ -288,8 +332,9 @@ export default function AgentPipeline({
               transition={{ duration: 0.5 }}
             />
           </div>
-          <span className="text-xs font-semibold text-gray-500 whitespace-nowrap">
-            {claimProgress.current}/{claimProgress.total} claims
+          <span className="text-xs font-semibold text-slate-400 whitespace-nowrap flex items-center gap-1.5">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            {claimProgress.current} of {claimProgress.total} claims processed
           </span>
         </div>
       )}

@@ -5,9 +5,10 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import type { PipelineState, SessionRow } from "@/types";
 
-// ─── Client factory ───────────────────────────────────────────────────────────
+// ─── Client factories ─────────────────────────────────────────────────────────
 
 let _serverClient: SupabaseClient | null = null;
+let _publicClient: SupabaseClient | null = null;
 
 /** Server-side Supabase client (uses service role key for full access) */
 export function getSupabaseServerClient(): SupabaseClient | null {
@@ -28,16 +29,18 @@ export function getSupabaseServerClient(): SupabaseClient | null {
 }
 
 /** Public Supabase client for browser usage (uses anon key) */
-export function getSupabasePublicClient(): SupabaseClient {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+export function getSupabasePublicClient(): SupabaseClient | null {
+  if (!_publicClient) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
 
-  if (!url || !key) {
-    throw new Error(
-      "Supabase public environment variables are not set."
-    );
+    if (!url || !key) {
+      console.warn("[Supabase] Public client environment variables missing.");
+      return null;
+    }
+    _publicClient = createClient(url, key);
   }
-  return createClient(url, key);
+  return _publicClient;
 }
 
 // ─── SQL Schema (for README / setup) ─────────────────────────────────────────
@@ -46,6 +49,7 @@ export const SUPABASE_SCHEMA_SQL = `
 
 CREATE TABLE IF NOT EXISTS sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   topic TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','running','done','error')),
   pipeline_state JSONB,
@@ -77,7 +81,7 @@ CREATE INDEX IF NOT EXISTS idx_sessions_created_at ON sessions(created_at DESC);
 /**
  * Create a new session record and return its ID.
  */
-export async function createSession(topic: string): Promise<string> {
+export async function createSession(topic: string, userId?: string): Promise<string> {
   const client = getSupabaseServerClient();
   if (!client) {
     throw new Error("Supabase environment variables are not set.");
@@ -85,7 +89,7 @@ export async function createSession(topic: string): Promise<string> {
 
   const { data, error } = await client
     .from("sessions")
-    .insert({ topic, status: "pending" })
+    .insert({ topic, status: "pending", user_id: userId ?? null })
     .select("id")
     .single();
 
@@ -115,7 +119,6 @@ export async function updateSession(
     .eq("id", sessionId);
 
   if (error) {
-    // Log but don't crash the pipeline over a DB update failure
     console.error(`[Supabase] Failed to update session ${sessionId}:`, error);
   }
 }
@@ -134,7 +137,7 @@ export async function getSession(sessionId: string): Promise<SessionRow | null> 
     .single();
 
   if (error) {
-    if (error.code === "PGRST116") return null; // Not found
+    if (error.code === "PGRST116") return null;
     throw new Error(`Failed to fetch session: ${error.message}`);
   }
   return data as SessionRow;

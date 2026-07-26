@@ -2,10 +2,12 @@
 
 /**
  * ExportButton — PDF and Markdown download
+ * STRICT: Official Lucide SVG icons only. No unicode symbol characters.
  */
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { FileCode, FileDown, Loader2 } from "lucide-react";
 
 interface ExportButtonProps {
   sessionId: string;
@@ -52,7 +54,7 @@ export default function ExportButton({
       // Title
       doc.setFont("helvetica", "bold");
       doc.setFontSize(18);
-      doc.setTextColor(30, 30, 30); // dark gray
+      doc.setTextColor(30, 30, 30);
       doc.text("VerifAI Research Report", margin, margin + 5);
 
       doc.setFont("helvetica", "normal");
@@ -73,7 +75,7 @@ export default function ExportButton({
       doc.setDrawColor(200, 200, 200);
       doc.line(margin, margin + 26, pageWidth - margin, margin + 26);
 
-      // Render markdown as plain text (simplified)
+      // Render markdown as plain text
       let y = margin + 36;
       const lines = reportMarkdown.split("\n");
 
@@ -84,11 +86,11 @@ export default function ExportButton({
         }
 
         const cleaned = line
-          .replace(/^#{1,6}\s+/, "") // Remove headers
-          .replace(/\*\*(.+?)\*\*/g, "$1") // Bold
-          .replace(/\[(.+?)\]\(.+?\)/g, "$1") // Links
-          .replace(/^[-*]\s+/, "  • ") // Lists
-          .replace(/`(.+?)`/g, "$1"); // Code
+          .replace(/^#{1,6}\s+/, "")
+          .replace(/\*\*(.+?)\*\*/g, "$1")
+          .replace(/\[(.+?)\]\(.+?\)/g, "$1")
+          .replace(/^[-*]\s+/, "  • ")
+          .replace(/`(.+?)`/g, "$1");
 
         if (line.startsWith("# ")) {
           doc.setFont("helvetica", "bold");
@@ -152,18 +154,16 @@ export default function ExportButton({
       <motion.button
         onClick={handleMarkdownExport}
         disabled={exporting !== null}
-        whileHover={{ scale: 1.03, backgroundColor: "rgba(255,255,255,0.8)" }}
+        whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-2xl border border-gray-200 bg-white/50 text-sm font-medium text-gray-700 hover:text-gray-900 shadow-sm transition-all disabled:opacity-50"
+        className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900/80 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-all disabled:opacity-50"
       >
         {exporting === "md" ? (
-          <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin" />
+          <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
         ) : (
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
+          <FileCode className="w-4 h-4 text-emerald-400" />
         )}
-        .md
+        <span>Markdown (.md)</span>
       </motion.button>
 
       <motion.button
@@ -171,16 +171,14 @@ export default function ExportButton({
         disabled={exporting !== null}
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
-        className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gray-900 hover:bg-black text-white text-sm font-semibold shadow-lg shadow-gray-900/20 transition-all disabled:opacity-50"
+        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 text-xs font-bold shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
       >
         {exporting === "pdf" ? (
-          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
         ) : (
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-          </svg>
+          <FileDown className="w-4 h-4 text-slate-950" />
         )}
-        Export PDF
+        <span>Export PDF</span>
       </motion.button>
     </div>
   );

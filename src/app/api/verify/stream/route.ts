@@ -129,7 +129,7 @@ function streamDemoEvents(sessionId: string): Response {
       event: createEvent(sessionId, {
         type: "stage_change",
         stage: "research",
-        message: '🔍 Agent 1: Breaking topic into sub-questions...',
+        message: 'Agent 1: Breaking topic into sub-questions...',
       }),
     },
     {
@@ -153,7 +153,7 @@ function streamDemoEvents(sessionId: string): Response {
       event: createEvent(sessionId, {
         type: "agent_log",
         stage: "research",
-        message: '✅ Extracted 2 claims from sub-question 1',
+        message: 'Extracted 2 claims from sub-question 1',
       }),
     },
     {
@@ -177,7 +177,7 @@ function streamDemoEvents(sessionId: string): Response {
       event: createEvent(sessionId, {
         type: "stage_change",
         stage: "verification",
-        message: '🔎 Agent 2: Verifying 6 claims with independent sources...',
+        message: 'Agent 2: Verifying 6 claims with independent sources...',
         totalClaims: 6,
       }),
     },
@@ -206,7 +206,7 @@ function streamDemoEvents(sessionId: string): Response {
       event: createEvent(sessionId, {
         type: "stage_change",
         stage: "contradiction_check",
-        message: '🔬 Agent 3: Checking for contradictions & hallucinations...',
+        message: 'Agent 3: Checking for contradictions & hallucinations...',
       }),
     },
     {
@@ -214,7 +214,7 @@ function streamDemoEvents(sessionId: string): Response {
       event: createEvent(sessionId, {
         type: "loop_triggered",
         stage: "contradiction_check",
-        message: '🔄 Feedback loop triggered: Claim 3 has HIGH severity — routing back to Agent 1!',
+        message: 'Feedback loop triggered: Claim 3 has HIGH severity — routing back to Agent 1!',
       }),
     },
     {
@@ -222,7 +222,7 @@ function streamDemoEvents(sessionId: string): Response {
       event: createEvent(sessionId, {
         type: "stage_change",
         stage: "research",
-        message: '🔄 Re-researching flagged claim (feedback loop)...',
+        message: 'Re-researching flagged claim (feedback loop)...',
       }),
     },
     {
@@ -230,7 +230,7 @@ function streamDemoEvents(sessionId: string): Response {
       event: createEvent(sessionId, {
         type: "stage_change",
         stage: "synthesis",
-        message: '📝 Agent 4: Computing confidence scores & generating final report...',
+        message: 'Agent 4: Computing confidence scores & generating final report...',
       }),
     },
     {

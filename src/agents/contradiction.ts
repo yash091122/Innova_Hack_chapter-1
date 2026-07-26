@@ -46,7 +46,7 @@ export async function runContradictionAgent(
     createEvent(sessionId, {
       type: "stage_change",
       stage: "contradiction_check",
-      message: `🔬 Agent 3: Checking for contradictions & hallucinations across ${claims.length} claims...`,
+      message: `Agent 3: Checking for contradictions & hallucinations across ${claims.length} claims...`,
     })
   );
 
@@ -108,7 +108,7 @@ If no issues are found, return: { "auditResults": [], "summary": "No contradicti
       createEvent(sessionId, {
         type: "agent_log",
         stage: "contradiction_check",
-        message: `🔬 Audit complete: ${auditResults.length} issue(s) found. ${parsed.summary}`,
+        message: `Audit complete: ${auditResults.length} issue(s) found. ${parsed.summary}`,
       })
     );
   } catch (err) {
@@ -118,7 +118,7 @@ If no issues are found, return: { "auditResults": [], "summary": "No contradicti
       createEvent(sessionId, {
         type: "agent_log",
         stage: "contradiction_check",
-        message: `⚠️ Contradiction check encountered an error — proceeding with no severity flags`,
+        message: `Contradiction check encountered an error — proceeding with no severity flags`,
       })
     );
     // Return claims unmodified on failure
@@ -143,7 +143,7 @@ If no issues are found, return: { "auditResults": [], "summary": "No contradicti
           stage: "contradiction_check",
           claimId: claim.id,
           claim: { severity: detectedSeverity },
-          message: `⚠️ Issue detected in claim "${claim.claim.slice(0, 60)}..." — severity: ${detectedSeverity.toUpperCase()}`,
+          message: `Issue detected in claim "${claim.claim.slice(0, 60)}..." — severity: ${detectedSeverity.toUpperCase()}`,
         })
       );
     }
