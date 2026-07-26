@@ -88,8 +88,8 @@ export async function tavilySearch(
   }
 
   console.error(`[Tavily] Search failed for query "${query}":`, lastError);
-  // Return empty array rather than crashing the pipeline
-  return [];
+  // Throw the error so the pipeline crashes and informs the user (e.g. if out of credits)
+  throw lastError ?? new Error("Tavily search failed unknown error");
 }
 
 /**
